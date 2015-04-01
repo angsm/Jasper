@@ -1,0 +1,879 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.0.1.final using JasperReports Library version 6.0.0  -->
+<!-- 2015-02-16T17:27:42 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sampleQC_report" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" uuid="68cef99e-194f-4dfb-9b9b-71356e1da3e6">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<property name="ireport.jasperserver.url" value="http://dlap65v:8080/jasperserver/"/>
+	<property name="ireport.jasperserver.user" value="jasperadmin|"/>
+	<property name="ireport.jasperserver.report.resource" value="/reports/LIMS_sampleFailure_report/sampleFailure_report_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/LIMS_sampleFailure_report/sampleFailure_report"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="CopyOflimsDB - R"/>
+	<style name="Table_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 3_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 3_CH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 3_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 4_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 4_CH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 4_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="sampleCount" uuid="09d980b6-8f1d-4033-a3e2-677e41e0c91e">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="limsDB - R"/>
+		<parameter name="sub_WORKFLOWNAME" class="java.lang.String">
+			<defaultValueExpression><![CDATA[$P{sub_WORKFLOWNAME}]]></defaultValueExpression>
+		</parameter>
+		<parameter name="sub_PROJECTNAME" class="java.lang.String">
+			<defaultValueExpression><![CDATA[$P{sub_PROJECTNAME}]]></defaultValueExpression>
+		</parameter>
+		<parameter name="sub_STARTDATE" class="java.lang.String">
+			<defaultValueExpression><![CDATA[$P{sub_STARTDATE}]]></defaultValueExpression>
+		</parameter>
+		<parameter name="sub_ENDDATE" class="java.lang.String">
+			<defaultValueExpression><![CDATA[$P{sub_ENDDATE}]]></defaultValueExpression>
+		</parameter>
+		<parameter name="sub_STEPNAME" class="java.lang.String">
+			<parameterDescription><![CDATA[]]></parameterDescription>
+			<defaultValueExpression><![CDATA[$P{sub_STEPNAME}]]></defaultValueExpression>
+		</parameter>
+		<queryString language="SQL">
+			<![CDATA[SELECT R1.TOTAL, R2.REMOVED, R2.REMOVED * 100 / NULLIF(R1.TOTAL, 0) AS PERCENTAGE
+FROM
+(SELECT COUNT(*) AS TOTAL
+	FROM
+		(SELECT *
+		FROM
+		(
+		SELECT CLARITYLIMS.ARTIFACT.NAME AS ARTNAME,
+		CASE
+			WHEN (CLARITYLIMS.ARTIFACTSTATE.QCFLAG = 0)
+		    THEN 'None'
+		    WHEN (CLARITYLIMS.ARTIFACTSTATE.QCFLAG = 1)
+		    THEN 'Pass'
+		    WHEN (CLARITYLIMS.ARTIFACTSTATE.QCFLAG = 2)
+		    THEN 'Fail'
+		END AS "QCFlag",
+		CLARITYLIMS.PROCESSTYPE.DISPLAYNAME AS STEPNAME,
+		CLARITYLIMS.PROCESS.DATERUN AS DATERUN,
+		CLARITYLIMS.LABPROTOCOL.PROTOCOLNAME AS PROTOCOLNAME,
+		CLARITYLIMS.LABWORKFLOW.WORKFLOWNAME,
+		CLARITYLIMS."SAMPLE".NAME AS SAMPLENAME,
+		ROW_NUMBER() Over (Partition BY CLARITYLIMS.PROCESS.LUID, CLARITYLIMS.ARTIFACT.NAME Order By CLARITYLIMS.ARTIFACTSTATE.LASTMODIFIEDDATE DESC) AS RANK,
+		CLARITYLIMS.PROJECT.NAME AS PROJECTNAME,
+		CLARITYLIMS.RESEARCHER.FIRSTNAME,
+		CLARITYLIMS.RESEARCHER.LASTNAME
+		  
+		FROM CLARITYLIMS.LABWORKFLOW
+		INNER JOIN CLARITYLIMS.WORKFLOWSECTION
+		ON CLARITYLIMS.LABWORKFLOW.WORKFLOWID = CLARITYLIMS.WORKFLOWSECTION.WORKFLOWID
+		INNER JOIN CLARITYLIMS.LABPROTOCOL
+		ON CLARITYLIMS.LABPROTOCOL.PROTOCOLID = CLARITYLIMS.WORKFLOWSECTION.PROTOCOLID
+		INNER JOIN CLARITYLIMS.PROTOCOLSTEP
+		ON CLARITYLIMS.LABPROTOCOL.PROTOCOLID = CLARITYLIMS.PROTOCOLSTEP.PROTOCOLID
+		INNER JOIN CLARITYLIMS.PROCESS
+		ON CLARITYLIMS.PROTOCOLSTEP.STEPID = CLARITYLIMS.PROCESS.PROTOCOLSTEPID
+		INNER JOIN CLARITYLIMS.PROCESSTYPE
+		ON CLARITYLIMS.PROCESSTYPE.TYPEID  = CLARITYLIMS.PROTOCOLSTEP.PROCESSTYPEID
+		AND CLARITYLIMS.PROCESSTYPE.TYPEID = CLARITYLIMS.PROCESS.TYPEID
+		INNER JOIN CLARITYLIMS.PROCESSIOTRACKER
+		ON CLARITYLIMS.PROCESS.PROCESSID = CLARITYLIMS.PROCESSIOTRACKER.PROCESSID
+		INNER JOIN CLARITYLIMS.OUTPUTMAPPING
+		ON CLARITYLIMS.PROCESSIOTRACKER.TRACKERID = CLARITYLIMS.OUTPUTMAPPING.TRACKERID
+		INNER JOIN CLARITYLIMS.ARTIFACT
+		ON CLARITYLIMS.ARTIFACT.ARTIFACTID = CLARITYLIMS.OUTPUTMAPPING.OUTPUTARTIFACTID
+		INNER JOIN CLARITYLIMS.ARTIFACTTYPE
+		ON CLARITYLIMS.ARTIFACTTYPE.TYPEID = CLARITYLIMS.ARTIFACT.ARTIFACTTYPEID
+		INNER JOIN CLARITYLIMS.ARTIFACTSTATE
+		ON CLARITYLIMS.ARTIFACT.ARTIFACTID = CLARITYLIMS.ARTIFACTSTATE.ARTIFACTID
+		INNER JOIN CLARITYLIMS.ARTIFACT_SAMPLE_MAP
+		ON CLARITYLIMS.ARTIFACT.ARTIFACTID = CLARITYLIMS.ARTIFACT_SAMPLE_MAP.ARTIFACTID
+		INNER JOIN CLARITYLIMS."SAMPLE"
+		ON CLARITYLIMS."SAMPLE".PROCESSID     = CLARITYLIMS.ARTIFACT_SAMPLE_MAP.PROCESSID
+		INNER JOIN CLARITYLIMS.PROJECT
+		ON CLARITYLIMS.PROJECT.PROJECTID      = CLARITYLIMS."SAMPLE".PROJECTID
+		INNER JOIN CLARITYLIMS.RESEARCHER
+		ON CLARITYLIMS.PROCESS.TECHID         = CLARITYLIMS.RESEARCHER.RESEARCHERID
+		
+		WHERE claritylims.workflowsection.WORKFLOWID =
+		  (SELECT claritylims.labworkflow.WORKFLOWID
+		  FROM claritylims.labworkflow
+		  WHERE claritylims.labworkflow.WORKFLOWNAME = $P{sub_WORKFLOWNAME} 
+		  )
+		AND claritylims.process.TYPEID IN
+		  (SELECT claritylims.processtype.TYPEID
+		  FROM claritylims.processtype
+		  WHERE claritylims.processtype.displayname = $P{sub_STEPNAME}
+		  )
+		AND claritylims.project.PROJECTID =
+		  (SELECT claritylims.project.PROJECTID
+		  FROM claritylims.project
+		  WHERE claritylims.project.NAME = $P{sub_PROJECTNAME} 
+		  )
+		AND CLARITYLIMS.PROCESS.DATERUN  BETWEEN TO_DATE( $P{sub_STARTDATE} ,  'YYYY-MM-DD') - 1 AND TO_DATE( $P{sub_ENDDATE} , 'YYYY-MM-DD') + 1
+		AND CLARITYLIMS.ARTIFACTSTATE.QCFLAG != 0
+		)
+		WHERE RANK = 1
+	)
+)R1,
+
+(SELECT COUNT(*) AS REMOVED
+	FROM
+	(SELECT *
+	FROM
+	(
+	SELECT CLARITYLIMS.ARTIFACT.NAME AS ARTNAME,
+		CASE
+		    WHEN (CLARITYLIMS.ARTIFACTSTATE.QCFLAG = 0)
+		    THEN 'None'
+		    WHEN (CLARITYLIMS.ARTIFACTSTATE.QCFLAG = 1)
+		    THEN 'Pass'
+		    WHEN (CLARITYLIMS.ARTIFACTSTATE.QCFLAG = 2)
+		    THEN 'Fail'
+		END AS "QCFlag",
+		CLARITYLIMS.PROCESSTYPE.DISPLAYNAME AS STEPNAME,
+		CLARITYLIMS.PROCESS.DATERUN AS DATERUN,
+		CLARITYLIMS.LABPROTOCOL.PROTOCOLNAME AS PROTOCOLNAME,
+		CLARITYLIMS.LABWORKFLOW.WORKFLOWNAME,
+		CLARITYLIMS."SAMPLE".NAME AS SAMPLENAME,
+		ROW_NUMBER() Over (Partition BY CLARITYLIMS.PROCESS.LUID, CLARITYLIMS.ARTIFACT.NAME Order By CLARITYLIMS.ARTIFACTSTATE.LASTMODIFIEDDATE DESC) AS RANK,
+		CLARITYLIMS.PROJECT.NAME AS PROJECTNAME,
+		CLARITYLIMS.RESEARCHER.FIRSTNAME,
+		CLARITYLIMS.RESEARCHER.LASTNAME
+		  
+		FROM CLARITYLIMS.LABWORKFLOW
+		INNER JOIN CLARITYLIMS.WORKFLOWSECTION
+		ON CLARITYLIMS.LABWORKFLOW.WORKFLOWID = CLARITYLIMS.WORKFLOWSECTION.WORKFLOWID
+		INNER JOIN CLARITYLIMS.LABPROTOCOL
+		ON CLARITYLIMS.LABPROTOCOL.PROTOCOLID = CLARITYLIMS.WORKFLOWSECTION.PROTOCOLID
+		INNER JOIN CLARITYLIMS.PROTOCOLSTEP
+		ON CLARITYLIMS.LABPROTOCOL.PROTOCOLID = CLARITYLIMS.PROTOCOLSTEP.PROTOCOLID
+		INNER JOIN CLARITYLIMS.PROCESS
+		ON CLARITYLIMS.PROTOCOLSTEP.STEPID = CLARITYLIMS.PROCESS.PROTOCOLSTEPID
+		INNER JOIN CLARITYLIMS.PROCESSTYPE
+		ON CLARITYLIMS.PROCESSTYPE.TYPEID  = CLARITYLIMS.PROTOCOLSTEP.PROCESSTYPEID
+		AND CLARITYLIMS.PROCESSTYPE.TYPEID = CLARITYLIMS.PROCESS.TYPEID
+		INNER JOIN CLARITYLIMS.PROCESSIOTRACKER
+		ON CLARITYLIMS.PROCESS.PROCESSID = CLARITYLIMS.PROCESSIOTRACKER.PROCESSID
+		INNER JOIN CLARITYLIMS.OUTPUTMAPPING
+		ON CLARITYLIMS.PROCESSIOTRACKER.TRACKERID = CLARITYLIMS.OUTPUTMAPPING.TRACKERID
+		INNER JOIN CLARITYLIMS.ARTIFACT
+		ON CLARITYLIMS.ARTIFACT.ARTIFACTID = CLARITYLIMS.OUTPUTMAPPING.OUTPUTARTIFACTID
+		INNER JOIN CLARITYLIMS.ARTIFACTTYPE
+		ON CLARITYLIMS.ARTIFACTTYPE.TYPEID = CLARITYLIMS.ARTIFACT.ARTIFACTTYPEID
+		INNER JOIN CLARITYLIMS.ARTIFACTSTATE
+		ON CLARITYLIMS.ARTIFACT.ARTIFACTID = CLARITYLIMS.ARTIFACTSTATE.ARTIFACTID
+		INNER JOIN CLARITYLIMS.ARTIFACT_SAMPLE_MAP
+		ON CLARITYLIMS.ARTIFACT.ARTIFACTID = CLARITYLIMS.ARTIFACT_SAMPLE_MAP.ARTIFACTID
+		INNER JOIN CLARITYLIMS."SAMPLE"
+		ON CLARITYLIMS."SAMPLE".PROCESSID     = CLARITYLIMS.ARTIFACT_SAMPLE_MAP.PROCESSID
+		INNER JOIN CLARITYLIMS.PROJECT
+		ON CLARITYLIMS.PROJECT.PROJECTID      = CLARITYLIMS."SAMPLE".PROJECTID
+		INNER JOIN CLARITYLIMS.RESEARCHER
+		ON CLARITYLIMS.PROCESS.TECHID         = CLARITYLIMS.RESEARCHER.RESEARCHERID
+		
+		WHERE claritylims.workflowsection.WORKFLOWID =
+		  (SELECT claritylims.labworkflow.WORKFLOWID
+		  FROM claritylims.labworkflow
+		  WHERE claritylims.labworkflow.WORKFLOWNAME = $P{sub_WORKFLOWNAME} 
+		  )
+		AND claritylims.process.TYPEID IN
+		  (SELECT claritylims.processtype.TYPEID
+		  FROM claritylims.processtype
+		  WHERE claritylims.processtype.displayname =  $P{sub_STEPNAME} 
+		  )
+		AND claritylims.project.PROJECTID =
+		  (SELECT claritylims.project.PROJECTID
+		  FROM claritylims.project
+		  WHERE claritylims.project.NAME = $P{sub_PROJECTNAME} 
+		  )
+		AND CLARITYLIMS.PROCESS.DATERUN  BETWEEN TO_DATE( $P{sub_STARTDATE} ,  'YYYY-MM-DD') - 1 AND TO_DATE( $P{sub_ENDDATE} , 'YYYY-MM-DD') + 1
+		AND CLARITYLIMS.ARTIFACTSTATE.QCFLAG != 0
+		)
+		WHERE RANK = 1
+		AND "QCFlag" = 'Fail'
+	)
+)R2]]>
+		</queryString>
+		<field name="TOTAL" class="java.math.BigDecimal"/>
+		<field name="REMOVED" class="java.math.BigDecimal"/>
+		<field name="PERCENTAGE" class="java.math.BigDecimal"/>
+	</subDataset>
+	<parameter name="param_WORKFLOWNAME" class="java.lang.String">
+		<defaultValueExpression><![CDATA[$P{param_WORKFLOWNAME}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="param_STEPNAME" class="java.lang.String">
+		<defaultValueExpression><![CDATA[$P{param_STEPNAME}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="param_PROJECTNAME" class="java.util.Collection">
+		<defaultValueExpression><![CDATA[$P{param_PROJECTNAME}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="param_STARTDATE" class="java.lang.String">
+		<defaultValueExpression><![CDATA[$P{param_STARTDATE}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="param_ENDDATE" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[$P{param_ENDDATE}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dis_PROTOCOLNAME" class="java.lang.String">
+		<defaultValueExpression><![CDATA[$P{dis_PROTOCOLNAME}]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[SELECT *
+FROM
+(
+SELECT CLARITYLIMS.ARTIFACT.NAME AS ARTNAME,
+  CLARITYLIMS.ARTIFACTSTATE.QCFLAG,
+  CLARITYLIMS.PROCESSTYPE.DISPLAYNAME AS STEPNAME,
+  CLARITYLIMS.PROCESS.DATERUN AS DATERUN,
+  CLARITYLIMS.LABPROTOCOL.PROTOCOLNAME AS PROTOCOLNAME,
+  CLARITYLIMS.LABWORKFLOW.WORKFLOWNAME,
+  CLARITYLIMS."SAMPLE".NAME AS SAMPLENAME,
+  ROW_NUMBER() Over (Partition BY CLARITYLIMS.PROCESS.LUID, CLARITYLIMS.ARTIFACT.NAME Order By CLARITYLIMS.ARTIFACTSTATE.LASTMODIFIEDDATE DESC) AS RANK,
+  CLARITYLIMS.PROJECT.NAME AS PROJECTNAME,
+  CLARITYLIMS.RESEARCHER.INITIALS,
+   INSTRUMENT.NAME AS INSTRUMENT
+  
+	FROM CLARITYLIMS.LABWORKFLOW
+	INNER JOIN CLARITYLIMS.WORKFLOWSECTION
+	ON CLARITYLIMS.LABWORKFLOW.WORKFLOWID = CLARITYLIMS.WORKFLOWSECTION.WORKFLOWID
+	INNER JOIN CLARITYLIMS.LABPROTOCOL
+	ON CLARITYLIMS.LABPROTOCOL.PROTOCOLID = CLARITYLIMS.WORKFLOWSECTION.PROTOCOLID
+	INNER JOIN CLARITYLIMS.PROTOCOLSTEP
+	ON CLARITYLIMS.LABPROTOCOL.PROTOCOLID = CLARITYLIMS.PROTOCOLSTEP.PROTOCOLID
+	INNER JOIN CLARITYLIMS.PROCESS
+	ON CLARITYLIMS.PROTOCOLSTEP.STEPID = CLARITYLIMS.PROCESS.PROTOCOLSTEPID
+	INNER JOIN CLARITYLIMS.PROCESSTYPE
+	ON CLARITYLIMS.PROCESSTYPE.TYPEID  = CLARITYLIMS.PROTOCOLSTEP.PROCESSTYPEID
+	AND CLARITYLIMS.PROCESSTYPE.TYPEID = CLARITYLIMS.PROCESS.TYPEID
+	INNER JOIN CLARITYLIMS.PROCESSIOTRACKER
+	ON CLARITYLIMS.PROCESS.PROCESSID = CLARITYLIMS.PROCESSIOTRACKER.PROCESSID
+	INNER JOIN CLARITYLIMS.OUTPUTMAPPING
+	ON CLARITYLIMS.PROCESSIOTRACKER.TRACKERID = CLARITYLIMS.OUTPUTMAPPING.TRACKERID
+	INNER JOIN CLARITYLIMS.ARTIFACT
+	ON CLARITYLIMS.ARTIFACT.ARTIFACTID = CLARITYLIMS.OUTPUTMAPPING.OUTPUTARTIFACTID
+	INNER JOIN CLARITYLIMS.ARTIFACTTYPE
+	ON CLARITYLIMS.ARTIFACTTYPE.TYPEID = CLARITYLIMS.ARTIFACT.ARTIFACTTYPEID
+	INNER JOIN CLARITYLIMS.ARTIFACTSTATE
+	ON CLARITYLIMS.ARTIFACT.ARTIFACTID = CLARITYLIMS.ARTIFACTSTATE.ARTIFACTID
+	INNER JOIN CLARITYLIMS.ARTIFACT_SAMPLE_MAP
+	ON CLARITYLIMS.ARTIFACT.ARTIFACTID = CLARITYLIMS.ARTIFACT_SAMPLE_MAP.ARTIFACTID
+	INNER JOIN CLARITYLIMS."SAMPLE"
+	ON CLARITYLIMS."SAMPLE".PROCESSID     = CLARITYLIMS.ARTIFACT_SAMPLE_MAP.PROCESSID
+	INNER JOIN CLARITYLIMS.PROJECT
+	ON CLARITYLIMS.PROJECT.PROJECTID      = CLARITYLIMS."SAMPLE".PROJECTID
+	INNER JOIN CLARITYLIMS.RESEARCHER
+	ON CLARITYLIMS.PROCESS.TECHID         = CLARITYLIMS.RESEARCHER.RESEARCHERID
+	FULL OUTER JOIN CLARITYLIMS.INSTALLATION
+	ON CLARITYLIMS.PROCESS.INSTALLATIONID = CLARITYLIMS.INSTALLATION.ID
+	FULL OUTER JOIN CLARITYLIMS.INSTRUMENT
+	ON CLARITYLIMS.INSTRUMENT.INSTRUMENTID  = CLARITYLIMS.INSTALLATION.INSTRUMENTID
+
+WHERE claritylims.workflowsection.WORKFLOWID =
+  (SELECT claritylims.labworkflow.WORKFLOWID
+  FROM claritylims.labworkflow
+  WHERE claritylims.labworkflow.WORKFLOWNAME = $P{param_WORKFLOWNAME}
+  )
+AND claritylims.process.TYPEID =
+  (SELECT claritylims.processtype.TYPEID
+  FROM claritylims.processtype
+  WHERE claritylims.processtype.DISPLAYNAME =  $P{param_STEPNAME} 
+  )
+AND claritylims.project.PROJECTID IN
+  (SELECT claritylims.project.PROJECTID
+  FROM claritylims.project
+  WHERE $X{IN, NAME, param_PROJECTNAME}
+  )
+AND CLARITYLIMS.PROCESS.DATERUN  BETWEEN TO_DATE( $P{param_STARTDATE} ,  'YYYY-MM-DD') - 1 AND TO_DATE( $P{param_ENDDATE}  , 'YYYY-MM-DD') + 1
+AND CLARITYLIMS.ARTIFACTSTATE.QCFLAG != 0
+)
+WHERE RANK = 1
+ORDER BY DATERUN DESC, ARTNAME]]>
+	</queryString>
+	<field name="WORKFLOWNAME" class="java.lang.String"/>
+	<field name="SAMPLENAME" class="java.lang.String"/>
+	<field name="PROJECTNAME" class="java.lang.String"/>
+	<field name="DATERUN" class="java.lang.String"/>
+	<field name="RANK" class="java.math.BigDecimal"/>
+	<field name="STEPNAME" class="java.lang.String"/>
+	<field name="ARTNAME" class="java.lang.String"/>
+	<field name="INITIALS" class="java.lang.String"/>
+	<field name="PROTOCOLNAME" class="java.lang.String"/>
+	<field name="QCFLAG" class="java.lang.Integer"/>
+	<field name="INSTRUMENT" class="java.lang.String"/>
+	<variable name="Failed" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{QCFLAG} == 2 ? new Integer(1) : new Integer(0)]]></variableExpression>
+	</variable>
+	<variable name="Total" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{QCFLAG} != null ? new Integer(1) : new Integer(0)]]></variableExpression>
+	</variable>
+	<variable name="default" class="java.lang.Integer">
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="63" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="85" y="42" width="287" height="21" forecolor="#949494" uuid="a02fc1e6-e5e0-44fd-bb0b-29affe0473e1"/>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{param_PROJECTNAME}.toString().replaceAll("\\]", "").replaceAll("\\[", "").replaceAll(",", "\n")]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="85" y="21" width="287" height="21" forecolor="#949494" uuid="a48a913e-994a-4eab-8bb8-61e0f2c985de"/>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[DATEFORMAT((new SimpleDateFormat("yyyy-MM-dd").parse($P{param_STARTDATE})),"dd MMM yyyy") + " to " + DATEFORMAT((new SimpleDateFormat("yyyy-MM-dd").parse($P{param_ENDDATE})),"dd MMM yyyy")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="78" height="21" forecolor="#A6A6A6" uuid="7dce5c9c-e7cd-43f6-8980-ea263d8a358e"/>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Report Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="78" y="42" width="7" height="21" forecolor="#CDCDCD" uuid="283c76ab-388a-4b89-816a-172dbb7cada9"/>
+				<textElement markup="none">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="42" width="78" height="21" forecolor="#A6A6A6" uuid="5ec23a7b-d352-42e1-859a-c84df95a78af"/>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Project]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="78" y="21" width="7" height="21" forecolor="#CDCDCD" uuid="e9545162-0563-4eef-8c20-76cbbe8033d2"/>
+				<textElement markup="none">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="0" width="78" height="21" forecolor="#A6A6A6" uuid="c36c5cce-f510-47d5-9441-ac6514f65819"/>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Workflow]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="21" width="78" height="21" forecolor="#A6A6A6" uuid="6872e9c2-2dec-486a-b49e-2c6112874904"/>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Date Range]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="78" y="0" width="7" height="21" forecolor="#CDCDCD" uuid="bbd9ceb3-fd63-4555-abb9-69ed9e86988d"/>
+				<textElement markup="none">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="458" y="0" width="7" height="21" forecolor="#CDCDCD" uuid="03eb9420-464f-4772-945f-dae7d2eb5dd5"/>
+				<textElement markup="none">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="42" width="78" height="21" forecolor="#A6A6A6" uuid="59bd94f8-3920-4998-bc61-d03ea56958d3"/>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[QC Step]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="85" y="0" width="287" height="21" forecolor="#A6A6A6" uuid="45764177-2523-49c2-b09a-6b33c95cfb2e"/>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[DATEFORMAT(new java.util.Date(),"dd'th' MMM yyyy h:mm'pm'")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="458" y="42" width="7" height="21" forecolor="#CDCDCD" uuid="7ecdfc16-5716-4763-a8b9-929c009d18f2"/>
+				<textElement markup="none">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="465" y="42" width="337" height="21" forecolor="#949494" uuid="a2a1853b-af94-4df6-b2aa-13974a51383e"/>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{param_STEPNAME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="380" y="21" width="78" height="21" forecolor="#949494" uuid="90516e27-58c0-4e08-b722-7ce81fda839e">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="12" isBold="false"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Protocol]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="465" y="21" width="337" height="21" forecolor="#949494" uuid="28d1362c-5352-47cb-b17a-6d75d6769edd"/>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{dis_PROTOCOLNAME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="458" y="21" width="7" height="21" forecolor="#949494" uuid="4b6e61ec-4f66-446a-b7d7-8a08edbf89cf"/>
+				<textElement markup="none">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="465" y="0" width="337" height="21" forecolor="#A6A6A6" uuid="3d2cb38f-e8d2-4b6a-84e5-697c65da7b73">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{param_WORKFLOWNAME}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="73" splitType="Stretch">
+			<staticText>
+				<reportElement x="268" y="16" width="312" height="40" uuid="79d33c90-1880-4352-aaec-0119ec90bc78"/>
+				<textElement>
+					<font size="26"/>
+				</textElement>
+				<text><![CDATA[Sample Failure Report]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="610" y="46" width="120" height="21" backcolor="#F9FFF7" uuid="ef9542d8-d694-41ed-8e0b-5291c1c961d2"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+					<paragraph leftIndent="10" spacingBefore="0"/>
+				</textElement>
+				<text><![CDATA[Failure rate]]></text>
+			</staticText>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement mode="Opaque" x="740" y="25" width="62" height="21" backcolor="#F9FFF7" uuid="f5e69e09-0518-4db6-8e82-c9327209bb6b">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Failed} != null ? $V{Failed} : $V{default}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="730" y="4" width="10" height="21" backcolor="#F9FFF7" uuid="5dcc9f46-7039-44f4-99e5-c3593405c053"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement mode="Opaque" x="740" y="4" width="62" height="21" backcolor="#F9FFF7" uuid="ca901fb0-642f-43c3-821c-497254815aa1">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Total} != null ? $V{Total} : $V{default}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="610" y="4" width="120" height="21" backcolor="#F9FFF7" uuid="b1f6d209-23e5-425d-88d5-9a9b86e1d3b6"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+					<paragraph leftIndent="10"/>
+				</textElement>
+				<text><![CDATA[Total # of analytes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="610" y="25" width="120" height="21" backcolor="#F9FFF7" uuid="312267ea-18c9-4cef-9b31-7deb3b4b2313">
+					<property name="local_mesure_unity" value="pixel"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+					<paragraph leftIndent="10"/>
+				</textElement>
+				<text><![CDATA[Failure count]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="730" y="25" width="10" height="21" backcolor="#F9FFF7" uuid="630f38fe-ebfa-4b23-9fdc-ccabb2a04395"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField evaluationTime="Report" pattern="#,##0.00#&apos;%&apos;;(#,##0.00#-)" isBlankWhenNull="false">
+				<reportElement mode="Opaque" x="740" y="46" width="62" height="21" backcolor="#F9FFF7" uuid="0a967a3f-0b6f-40eb-96aa-d4692f1f6652">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Total} != null && $V{Failed} != null ? (($V{Failed}.doubleValue() / $V{Total}.doubleValue()) * 100.0) : 0.0]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="730" y="46" width="10" height="21" backcolor="#F9FFF7" uuid="3289b281-9da9-42ac-abab-9480556f2dea"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="33" splitType="Prevent">
+			<staticText>
+				<reportElement x="100" y="10" width="159" height="23" uuid="3452d26d-0570-4a22-a6e9-1743129179f4">
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="14" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Sample]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="481" y="10" width="193" height="23" uuid="99a4e1f7-e100-4af3-a9cf-8a8ab182411f">
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="14" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Project]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="674" y="10" width="50" height="23" uuid="34d5fed1-d2c5-4b47-a67d-b596c13e84d4">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="14" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[User]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="-19" y="-1" width="840" height="1" forecolor="#022FF0" backcolor="#0022FF" uuid="cb88656c-dc83-477b-a856-93be25ba030a">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="1" y="10" width="99" height="23" uuid="dcfb3e2e-1a8f-480d-b5ba-6da86ecc48f1">
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="14" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="259" y="10" width="222" height="23" uuid="baf38892-d3f9-4e6a-bab2-1a030ec89424">
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="14" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Analyte Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" x="724" y="10" width="97" height="23" uuid="23b5abc5-3a2e-457b-9f65-fe88b3fdb30e">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Top">
+					<font fontName="Calibri" size="14" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Instrument]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="674" y="0" width="50" height="20" isRemoveLineWhenBlank="true" uuid="9885e3dd-8dd6-4cc6-a279-504edcc2e777">
+					<printWhenExpression><![CDATA[$F{QCFLAG} == 2]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INITIALS}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement isPrintRepeatedValues="false" x="1" y="0" width="99" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="2543b9a5-3c96-404b-b035-8debfa8fa677">
+					<printWhenExpression><![CDATA[$F{QCFLAG} == 2]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd MMM yyyy").format(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse($F{DATERUN}))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="259" y="0" width="222" height="20" isRemoveLineWhenBlank="true" uuid="22ad46ca-5f66-4781-a935-195c6534e953">
+					<printWhenExpression><![CDATA[$F{QCFLAG} == 2]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ARTNAME}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement key="" isPrintRepeatedValues="false" x="100" y="0" width="159" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="41c6293f-69d3-49dc-98a5-d7553085c3dc">
+					<printWhenExpression><![CDATA[$F{QCFLAG} == 2]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SAMPLENAME}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="481" y="0" width="193" height="20" isRemoveLineWhenBlank="true" uuid="ad6de3f9-42c3-476f-a282-8e00b1fa64d2">
+					<printWhenExpression><![CDATA[$F{QCFLAG} == 2]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PROJECTNAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="724" y="0" width="78" height="20" isRemoveLineWhenBlank="true" uuid="0f7feff6-f87f-4200-8ca2-94e5df99587e">
+					<printWhenExpression><![CDATA[$F{QCFLAG} == 2]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INSTRUMENT} != null ? $F{INSTRUMENT} : "N.A"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="602" y="10" width="100" height="20" uuid="7b9a2779-fe4a-42fa-a179-fcd8badcda70">
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="702" y="10" width="100" height="20" uuid="a817cff7-f7b1-47a7-bc4f-18992bf29a0c">
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="-20" y="0" width="841" height="1" forecolor="#022FF0" backcolor="#0022FF" uuid="552f3d13-962f-4d2e-a273-a824ec11e626">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</rectangle>
+		</band>
+	</pageFooter>
+</jasperReport>
