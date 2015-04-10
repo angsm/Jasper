@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.0.3.final using JasperReports Library version 6.0.3  -->
-<!-- 2015-04-09T17:15:28 -->
+<!-- 2015-04-10T14:55:09 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Summary report" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="888975be-024d-42e5-a907-abfa30d67ac8">
 	<property name="ireport.jasperserver.url" value="http://dlap65v:8080/jasperserver/"/>
 	<property name="ireport.jasperserver.user" value="jasperadmin|"/>
 	<property name="ireport.jasperserver.report.resource" value="/reports/WIP_Reports/TEST_Summaryreport_files/main_jrxml"/>
 	<property name="ireport.jasperserver.reportUnit" value="/reports/WIP_Reports/TEST_Summaryreport"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="CopyOflimsDB - R"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="limsDB - RW"/>
 	<style name="Crosstab_CH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -1063,7 +1063,7 @@ SELECT CLARITYLIMS.ARTIFACTSTATE.QCFLAG AS QCFLAG,
     CLARITYLIMS.PROCESSTYPE.DISPLAYNAME AS STEPNAME,
     ROW_NUMBER() Over (Partition BY CLARITYLIMS.PROCESS.LUID, CLARITYLIMS.ARTIFACT.NAME Order By CLARITYLIMS.ARTIFACTSTATE.LASTMODIFIEDDATE DESC) AS RANK,
     TO_CHAR(CLARITYLIMS.PROCESS.DATERUN, 'YYYY') AS YEAR,
-    CLARITYLIMS.LABWORKFLOW.WORKFLOWNAME AS wfNAME,
+    CLARITYLIMS.LABWORKFLOW.WorkflowName AS wfNAME,
     CLARITYLIMS.PROCESS.DATERUN AS daterun,
     CLARITYLIMS.PROJECT.NAME AS projName
     
@@ -1144,7 +1144,7 @@ TO_DATE(MTH,  'MON') AS MON,
 TO_CHAR(claritylims.routingaction.LASTMODIFIEDDATE, 'YYYY') AS YEAR,
 claritylims.processtype.DISPLAYNAME,
 claritylims.labprotocol.PROTOCOLNAME,
-CLARITYLIMS.LABWORKFLOW.WORKFLOWNAME
+CLARITYLIMS.LABWORKFLOW.WorkflowName
   FROM claritylims.labworkflow
 INNER JOIN claritylims.workflowsection
 ON claritylims.workflowsection.WORKFLOWID = claritylims.labworkflow.WORKFLOWID
@@ -1199,7 +1199,7 @@ RIGHT OUTER JOIN
 		<field name="YEAR" class="java.lang.String"/>
 		<field name="DISPLAYNAME" class="java.lang.String"/>
 		<field name="PROTOCOLNAME" class="java.lang.String"/>
-		<field name="WORKFLOWNAME" class="java.lang.String"/>
+		<field name="WorkflowName" class="java.lang.String"/>
 		<field name="PROJ" class="java.lang.String"/>
 	</subDataset>
 	<subDataset name="ReportAmend" uuid="b003c16b-f808-4b97-96f2-81cbd64f62fd">
@@ -1248,7 +1248,7 @@ ORDER BY p.DATERUN,
 		</queryString>
 		<field name="MTH" class="java.lang.String"/>
 	</subDataset>
-	<subDataset name="Turn-Around-Time" uuid="00e74a96-059f-4e98-bb51-2f0fbb0451e2">
+	<subDataset name="TurnAroundTime" uuid="00e74a96-059f-4e98-bb51-2f0fbb0451e2">
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="CopyOflimsDB - R"/>
 		<parameter name="turnAroundYear" class="java.lang.String">
 			<parameterDescription><![CDATA[]]></parameterDescription>
@@ -1294,7 +1294,7 @@ ON TO_CHAR(RUN, 'MON') = M.MTH]]>
 		<field name="DAYSTAKEN" class="java.lang.String"/>
 		<field name="YEAR" class="java.lang.String"/>
 	</subDataset>
-	<subDataset name="bclData" uuid="a0b327b3-ee40-4b0a-9cd9-59aa194d985d">
+	<subDataset name="BCLData" uuid="a0b327b3-ee40-4b0a-9cd9-59aa194d985d">
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="limsDB - RW"/>
 		<parameter name="bclYear" class="java.lang.String">
 			<parameterDescription><![CDATA[]]></parameterDescription>
@@ -1363,9 +1363,8 @@ WHERE (proStat = 'COMPLETE' OR proStat IS NULL)]]>
 	</subDataset>
 	<parameter name="Year" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
-		<defaultValueExpression><![CDATA[YEAR( new Date() )]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[YEAR(new Date())]]></defaultValueExpression>
 	</parameter>
-	<parameter name="param_allProjName" class="java.util.Collection" isForPrompting="false"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT SYSDATE
 FROM DUAL]]>
@@ -1404,7 +1403,7 @@ FROM DUAL]]>
 		<band height="126" splitType="Stretch">
 			<crosstab>
 				<reportElement key="" positionType="Float" x="5" y="66" width="792" height="20" isRemoveLineWhenBlank="true" uuid="fc61a723-53fc-4819-ae80-42545674e28d">
-					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="Sample failure ct"/>
+					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="Sample_Failure"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -1422,7 +1421,7 @@ FROM DUAL]]>
 						</datasetRun>
 					</dataset>
 				</crosstabDataset>
-				<rowGroup name="STEPNAME1" width="360">
+				<rowGroup name="STEP" width="360">
 					<bucket order="Descending" class="java.lang.String">
 						<bucketExpression><![CDATA[$F{STEPNAME}]]></bucketExpression>
 					</bucket>
@@ -1430,7 +1429,7 @@ FROM DUAL]]>
 						<cellContents mode="Opaque" style="Crosstab 25_CH">
 							<textField isStretchWithOverflow="true">
 								<reportElement mode="Opaque" x="130" y="0" width="170" height="20" isRemoveLineWhenBlank="true" backcolor="#F0F8FF" uuid="8f923f65-28b8-4b43-a30a-4950b211c544">
-									<printWhenExpression><![CDATA[$V{STEPNAME1} != null]]></printWhenExpression>
+									<printWhenExpression><![CDATA[$V{STEP} != null]]></printWhenExpression>
 								</reportElement>
 								<box>
 									<topPen lineWidth="0.5"/>
@@ -1442,13 +1441,13 @@ FROM DUAL]]>
 									<font size="7"/>
 									<paragraph leftIndent="0" rightIndent="5" spacingBefore="0" spacingAfter="0"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$V{STEPNAME1}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$V{STEP}]]></textFieldExpression>
 							</textField>
 							<textField isStretchWithOverflow="true">
 								<reportElement mode="Opaque" x="110" y="0" width="20" height="20" isRemoveLineWhenBlank="true" backcolor="#F0F8FF" uuid="1b2ae7f4-9059-460d-9e8f-291d44e4104d">
 									<property name="local_mesure_unitwidth" value="pixel"/>
 									<property name="com.jaspersoft.studio.unit.width" value="px"/>
-									<printWhenExpression><![CDATA[$V{STEPNAME1} != null]]></printWhenExpression>
+									<printWhenExpression><![CDATA[$V{STEP} != null]]></printWhenExpression>
 								</reportElement>
 								<box>
 									<topPen lineWidth="0.5"/>
@@ -1466,7 +1465,7 @@ FROM DUAL]]>
 								<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="300" y="0" width="60" height="20" isRemoveLineWhenBlank="true" backcolor="#F0F8FF" uuid="7a207093-ca50-4141-89c5-a522649f4b4a">
 									<property name="local_mesure_unitwidth" value="pixel"/>
 									<property name="com.jaspersoft.studio.unit.width" value="px"/>
-									<printWhenExpression><![CDATA[$V{STEPNAME1} != null]]></printWhenExpression>
+									<printWhenExpression><![CDATA[$V{STEP} != null]]></printWhenExpression>
 								</reportElement>
 								<box>
 									<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
@@ -1498,7 +1497,7 @@ FROM DUAL]]>
 							</textField>
 							<textField isBlankWhenNull="true">
 								<reportElement isPrintRepeatedValues="false" mode="Transparent" x="0" y="0" width="110" height="20" backcolor="#CCF1FF" uuid="543cd2fe-2626-4398-be5d-32702496043b">
-									<printWhenExpression><![CDATA[$V{STEPNAME1} != null]]></printWhenExpression>
+									<printWhenExpression><![CDATA[$V{STEP} != null]]></printWhenExpression>
 								</reportElement>
 								<box>
 									<leftPen lineWidth="0.5"/>
@@ -1525,7 +1524,7 @@ FROM DUAL]]>
 						</cellContents>
 					</crosstabTotalRowHeader>
 				</rowGroup>
-				<columnGroup name="DATERUN1" height="0">
+				<columnGroup name="MTH" height="0">
 					<bucket class="java.sql.Timestamp">
 						<bucketExpression><![CDATA[$F{MON}]]></bucketExpression>
 					</bucket>
@@ -1548,16 +1547,16 @@ FROM DUAL]]>
 						</cellContents>
 					</crosstabTotalColumnHeader>
 				</columnGroup>
-				<measure name="QCFLAG_MEASURE1" class="java.lang.Integer" calculation="Sum">
+				<measure name="QCFLAG_MEASURE" class="java.lang.Integer" calculation="Sum">
 					<measureExpression><![CDATA[$F{QCFLAG} == 2 && $F{RANK} == 1 && $F{YEAR}.equals($P{failureYear}) ? new Integer(1) : new Integer(0)]]></measureExpression>
 				</measure>
-				<measure name="Total failures" class="java.lang.Double" calculation="Sum">
+				<measure name="ANALYTE_COUNT" class="java.lang.Double" calculation="Sum">
 					<measureExpression><![CDATA[$F{YEAR}.equals($P{failureYear}) && $F{RANK} == 1 ? new Integer(1) : new Integer(0)]]></measureExpression>
 				</measure>
-				<measure name="workflowName" class="java.lang.String">
+				<measure name="WorkflowName" class="java.lang.String">
 					<measureExpression><![CDATA[$F{WFNAME}]]></measureExpression>
 				</measure>
-				<measure name="All project Names" class="java.util.ArrayList" calculation="First">
+				<measure name="All_ProjectName" class="java.util.ArrayList" calculation="First">
 					<measureExpression><![CDATA[new ArrayList(Arrays.asList($F{PROJ}.split(",")))]]></measureExpression>
 				</measure>
 				<crosstabCell width="36" height="20">
@@ -1566,7 +1565,7 @@ FROM DUAL]]>
 							<reportElement mode="Opaque" x="0" y="0" width="36" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true" backcolor="#F0F8FF" uuid="a27ef991-aaeb-406b-a4f0-6c34ef644582">
 								<property name="local_mesure_unitwidth" value="pixel"/>
 								<property name="com.jaspersoft.studio.unit.width" value="px"/>
-								<printWhenExpression><![CDATA[$V{STEPNAME1} != null]]></printWhenExpression>
+								<printWhenExpression><![CDATA[$V{STEP} != null]]></printWhenExpression>
 							</reportElement>
 							<box>
 								<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
@@ -1578,28 +1577,28 @@ FROM DUAL]]>
 								<font size="7"/>
 								<paragraph leftIndent="5"/>
 							</textElement>
-							<textFieldExpression><![CDATA[Double.isNaN($V{QCFLAG_MEASURE1} / $V{Total failures}) ? 0.0 : $V{QCFLAG_MEASURE1} / $V{Total failures}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[Double.isNaN($V{QCFLAG_MEASURE} / $V{ANALYTE_COUNT}) ? 0.0 : $V{QCFLAG_MEASURE} / $V{ANALYTE_COUNT}]]></textFieldExpression>
 							<hyperlinkParameter name="_report">
 								<hyperlinkParameterExpression><![CDATA["/reports/LIMS_sampleFailure_report/sampleFailure_report"]]></hyperlinkParameterExpression>
 							</hyperlinkParameter>
 							<hyperlinkParameter name="param_STARTDATE">
-								<hyperlinkParameterExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").format($V{DATERUN1})]]></hyperlinkParameterExpression>
+								<hyperlinkParameterExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").format($V{MTH})]]></hyperlinkParameterExpression>
 							</hyperlinkParameter>
 							<hyperlinkParameter name="param_ENDDATE">
-								<hyperlinkParameterExpression><![CDATA[new SimpleDateFormat("yyyy-MM").format($V{DATERUN1}) + "-" + (
-	IF((new SimpleDateFormat("M").format($V{DATERUN1}).equals("1")),31,
-		IF((new SimpleDateFormat("M").format($V{DATERUN1}).equals("2")),
-				(IF($V{DATERUN1}.getYear()%4 == 0,29,28)),
+								<hyperlinkParameterExpression><![CDATA[new SimpleDateFormat("yyyy-MM").format($V{MTH}) + "-" + (
+	IF((new SimpleDateFormat("M").format($V{MTH}).equals("1")),31,
+		IF((new SimpleDateFormat("M").format($V{MTH}).equals("2")),
+				(IF($V{MTH}.getYear()%4 == 0,29,28)),
 				
-			IF((new SimpleDateFormat("M").format($V{DATERUN1}).equals("3")),31,
-				IF((new SimpleDateFormat("M").format($V{DATERUN1}).equals("4")),30,
-					IF((new SimpleDateFormat("M").format($V{DATERUN1}).equals("5")),31,
-						IF((new SimpleDateFormat("M").format($V{DATERUN1}).equals("6")),30,
-							IF((new SimpleDateFormat("M").format($V{DATERUN1}).equals("7")),31,
-								IF((new SimpleDateFormat("M").format($V{DATERUN1}).equals("8")),31,
-									IF((new SimpleDateFormat("M").format($V{DATERUN1}).equals("9")),30,
-										IF((new SimpleDateFormat("M").format($V{DATERUN1}).equals("10")),31,
-											IF((new SimpleDateFormat("M").format($V{DATERUN1}).equals("11")),30,31)
+			IF((new SimpleDateFormat("M").format($V{MTH}).equals("3")),31,
+				IF((new SimpleDateFormat("M").format($V{MTH}).equals("4")),30,
+					IF((new SimpleDateFormat("M").format($V{MTH}).equals("5")),31,
+						IF((new SimpleDateFormat("M").format($V{MTH}).equals("6")),30,
+							IF((new SimpleDateFormat("M").format($V{MTH}).equals("7")),31,
+								IF((new SimpleDateFormat("M").format($V{MTH}).equals("8")),31,
+									IF((new SimpleDateFormat("M").format($V{MTH}).equals("9")),30,
+										IF((new SimpleDateFormat("M").format($V{MTH}).equals("10")),31,
+											IF((new SimpleDateFormat("M").format($V{MTH}).equals("11")),30,31)
 										))
 								)
 							)
@@ -1613,18 +1612,18 @@ FROM DUAL]]>
 		)]]></hyperlinkParameterExpression>
 							</hyperlinkParameter>
 							<hyperlinkParameter name="param_PROJECTNAME">
-								<hyperlinkParameterExpression><![CDATA[$V{All project Names}]]></hyperlinkParameterExpression>
+								<hyperlinkParameterExpression><![CDATA[$V{All_ProjectName}]]></hyperlinkParameterExpression>
 							</hyperlinkParameter>
-							<hyperlinkParameter name="param_WORKFLOWNAME">
-								<hyperlinkParameterExpression><![CDATA[$V{workflowName}]]></hyperlinkParameterExpression>
+							<hyperlinkParameter name="param_WorkflowName">
+								<hyperlinkParameterExpression><![CDATA[$V{WorkflowName}]]></hyperlinkParameterExpression>
 							</hyperlinkParameter>
 							<hyperlinkParameter name="param_STEPNAME">
-								<hyperlinkParameterExpression><![CDATA[$V{STEPNAME1}]]></hyperlinkParameterExpression>
+								<hyperlinkParameterExpression><![CDATA[$V{STEP}]]></hyperlinkParameterExpression>
 							</hyperlinkParameter>
 						</textField>
 					</cellContents>
 				</crosstabCell>
-				<crosstabCell width="50" height="20" rowTotalGroup="STEPNAME1">
+				<crosstabCell width="50" height="20" rowTotalGroup="STEP">
 					<cellContents mode="Opaque" style="Crosstab 25_CT">
 						<textField>
 							<reportElement x="0" y="0" width="50" height="20" forecolor="#FFFFFF" uuid="23fada6a-3b1b-46a8-bafb-152e84a3bacb"/>
@@ -1632,14 +1631,14 @@ FROM DUAL]]>
 								<font size="8"/>
 								<paragraph leftIndent="5"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$V{QCFLAG_MEASURE1}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$V{QCFLAG_MEASURE}]]></textFieldExpression>
 						</textField>
 					</cellContents>
 				</crosstabCell>
 			</crosstab>
 			<crosstab>
 				<reportElement positionType="Float" x="5" y="46" width="792" height="20" isRemoveLineWhenBlank="true" backcolor="#FFFFFF" uuid="2e2ec350-ce35-4c91-bc48-b45ffebcf93f">
-					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="Sample reject ct"/>
+					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="Sample_Reject"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -1657,7 +1656,7 @@ FROM DUAL]]>
 						</datasetRun>
 					</dataset>
 				</crosstabDataset>
-				<rowGroup name="ACTIONTYPE1" width="360">
+				<rowGroup name="PROTOCOL" width="360">
 					<bucket class="java.lang.String">
 						<bucketExpression><![CDATA[$F{PROTOCOLNAME}]]></bucketExpression>
 					</bucket>
@@ -1665,7 +1664,7 @@ FROM DUAL]]>
 						<cellContents mode="Opaque" style="Crosstab 6_CH">
 							<textField isBlankWhenNull="true">
 								<reportElement mode="Opaque" x="0" y="0" width="110" height="20" uuid="784f8e4d-567a-4300-8ee8-c2b7ce73303b">
-									<printWhenExpression><![CDATA[$V{ROW_COUNT} != 1 && $V{ACTIONTYPE1} != null]]></printWhenExpression>
+									<printWhenExpression><![CDATA[$V{ROW_COUNT} != 1 && $V{PROTOCOL} != null]]></printWhenExpression>
 								</reportElement>
 								<box>
 									<leftPen lineWidth="0.5"/>
@@ -1675,7 +1674,7 @@ FROM DUAL]]>
 								<reportElement key="" mode="Opaque" x="110" y="0" width="190" height="20" isRemoveLineWhenBlank="true" backcolor="#FFFFFF" uuid="231cfefb-990e-475c-815d-f960890b19ee">
 									<property name="local_mesure_unitwidth" value="pixel"/>
 									<property name="com.jaspersoft.studio.unit.width" value="px"/>
-									<printWhenExpression><![CDATA[$V{ACTIONTYPE1} != null]]></printWhenExpression>
+									<printWhenExpression><![CDATA[$V{PROTOCOL} != null]]></printWhenExpression>
 								</reportElement>
 								<box>
 									<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
@@ -1687,13 +1686,13 @@ FROM DUAL]]>
 									<font size="7"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$V{ACTIONTYPE1}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$V{PROTOCOL}]]></textFieldExpression>
 							</textField>
 							<textField>
 								<reportElement key="" mode="Opaque" x="300" y="0" width="60" height="20" isRemoveLineWhenBlank="true" backcolor="#FFFFFF" uuid="e51d9b63-91c6-4144-aaf6-1782835a6d48">
 									<property name="local_mesure_unitwidth" value="pixel"/>
 									<property name="com.jaspersoft.studio.unit.width" value="px"/>
-									<printWhenExpression><![CDATA[$V{ACTIONTYPE1} != null]]></printWhenExpression>
+									<printWhenExpression><![CDATA[$V{PROTOCOL} != null]]></printWhenExpression>
 								</reportElement>
 								<box>
 									<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
@@ -1709,7 +1708,7 @@ FROM DUAL]]>
 							</textField>
 							<textField>
 								<reportElement isPrintRepeatedValues="false" mode="Opaque" x="0" y="0" width="110" height="20" isRemoveLineWhenBlank="true" backcolor="#FFFFFF" uuid="67d58caa-9be9-45d8-bf53-dca281aedafb">
-									<printWhenExpression><![CDATA[$V{ROW_COUNT} == 1 && $V{ACTIONTYPE1} != null]]></printWhenExpression>
+									<printWhenExpression><![CDATA[$V{ROW_COUNT} == 1 && $V{PROTOCOL} != null]]></printWhenExpression>
 								</reportElement>
 								<box>
 									<leftPen lineWidth="0.5"/>
@@ -1734,12 +1733,12 @@ FROM DUAL]]>
 									<font size="8"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
-								<text><![CDATA[Total ACTIONTYPE1]]></text>
+								<text><![CDATA[Total PROTOCOL]]></text>
 							</staticText>
 						</cellContents>
 					</crosstabTotalRowHeader>
 				</rowGroup>
-				<columnGroup name="ACTIONTAKENDATE1" height="0">
+				<columnGroup name="MTH" height="0">
 					<bucket class="java.sql.Timestamp">
 						<bucketExpression><![CDATA[$F{MON}]]></bucketExpression>
 					</bucket>
@@ -1754,21 +1753,21 @@ FROM DUAL]]>
 									<font size="8"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
-								<text><![CDATA[Total ACTIONTAKENDATE1]]></text>
+								<text><![CDATA[Total MTH]]></text>
 							</staticText>
 						</cellContents>
 					</crosstabTotalColumnHeader>
 				</columnGroup>
-				<measure name="ACTIONTAKENDATE_MEASURE1" class="java.lang.Double" calculation="Sum">
+				<measure name="ACTION_MEASURE" class="java.lang.Double" calculation="Sum">
 					<measureExpression><![CDATA[$F{YEAR}.equals($P{RejectYear}) && !$F{DISPLAYNAME}.contains( "Auto verify" ) && $F{ACTIONTYPE}.equals("REMOVE") ? new Integer(1) : new Integer(0)]]></measureExpression>
 				</measure>
-				<measure name="Total Rejections" class="java.lang.Double" calculation="Sum">
+				<measure name="REJECTION_COUNT" class="java.lang.Double" calculation="Sum">
 					<measureExpression><![CDATA[$F{YEAR}.equals($P{RejectYear}) ? new Integer(1) : new Integer(0)]]></measureExpression>
 				</measure>
 				<measure name="WorkflowName" class="java.lang.String">
-					<measureExpression><![CDATA[$F{WORKFLOWNAME}]]></measureExpression>
+					<measureExpression><![CDATA[$F{WorkflowName}]]></measureExpression>
 				</measure>
-				<measure name="All project Names" class="java.util.ArrayList">
+				<measure name="All_ProjectName" class="java.util.ArrayList">
 					<measureExpression><![CDATA[new ArrayList(Arrays.asList($F{PROJ}.split(",")))]]></measureExpression>
 				</measure>
 				<measure name="ProtocolName" class="java.lang.String">
@@ -1780,7 +1779,7 @@ FROM DUAL]]>
 							<reportElement key="" mode="Opaque" x="0" y="0" width="36" height="20" isRemoveLineWhenBlank="true" backcolor="#FFFFFF" uuid="8201e35e-14f9-4c4a-b594-b07edf4eafad">
 								<property name="com.jaspersoft.studio.unit.width" value="px"/>
 								<property name="local_mesure_unitwidth" value="pixel"/>
-								<printWhenExpression><![CDATA[$V{ACTIONTYPE1} != null]]></printWhenExpression>
+								<printWhenExpression><![CDATA[$V{PROTOCOL} != null]]></printWhenExpression>
 							</reportElement>
 							<box>
 								<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
@@ -1792,28 +1791,28 @@ FROM DUAL]]>
 								<font size="7"/>
 								<paragraph leftIndent="5"/>
 							</textElement>
-							<textFieldExpression><![CDATA[Double.isNaN($V{ACTIONTAKENDATE_MEASURE1} / $V{Total Rejections})? 0.0 : ($V{ACTIONTAKENDATE_MEASURE1} / $V{Total Rejections})]]></textFieldExpression>
+							<textFieldExpression><![CDATA[Double.isNaN($V{ACTION_MEASURE} / $V{REJECTION_COUNT})? 0.0 : ($V{ACTION_MEASURE} / $V{REJECTION_COUNT})]]></textFieldExpression>
 							<hyperlinkParameter name="_report">
 								<hyperlinkParameterExpression><![CDATA["/reports/LIMS_sampleFailure_report/sampleRejection_report"]]></hyperlinkParameterExpression>
 							</hyperlinkParameter>
 							<hyperlinkParameter name="param_STARTDATE">
-								<hyperlinkParameterExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").format($V{ACTIONTAKENDATE1})]]></hyperlinkParameterExpression>
+								<hyperlinkParameterExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").format($V{MTH})]]></hyperlinkParameterExpression>
 							</hyperlinkParameter>
 							<hyperlinkParameter name="param_ENDDATE">
-								<hyperlinkParameterExpression><![CDATA[new SimpleDateFormat("yyyy-MM").format($V{ACTIONTAKENDATE1}) + "-" + (
-	IF((new SimpleDateFormat("M").format($V{ACTIONTAKENDATE1}).equals("1")),31,
-		IF((new SimpleDateFormat("M").format($V{ACTIONTAKENDATE1}).equals("2")),
-				(IF($V{ACTIONTAKENDATE1}.getYear()%4 == 0,29,28)),
+								<hyperlinkParameterExpression><![CDATA[new SimpleDateFormat("yyyy-MM").format($V{MTH}) + "-" + (
+	IF((new SimpleDateFormat("M").format($V{MTH}).equals("1")),31,
+		IF((new SimpleDateFormat("M").format($V{MTH}).equals("2")),
+				(IF($V{MTH}.getYear()%4 == 0,29,28)),
 				
-			IF((new SimpleDateFormat("M").format($V{ACTIONTAKENDATE1}).equals("3")),31,
-				IF((new SimpleDateFormat("M").format($V{ACTIONTAKENDATE1}).equals("4")),30,
-					IF((new SimpleDateFormat("M").format($V{ACTIONTAKENDATE1}).equals("5")),31,
-						IF((new SimpleDateFormat("M").format($V{ACTIONTAKENDATE1}).equals("6")),30,
-							IF((new SimpleDateFormat("M").format($V{ACTIONTAKENDATE1}).equals("7")),31,
-								IF((new SimpleDateFormat("M").format($V{ACTIONTAKENDATE1}).equals("8")),31,
-									IF((new SimpleDateFormat("M").format($V{ACTIONTAKENDATE1}).equals("9")),30,
-										IF((new SimpleDateFormat("M").format($V{ACTIONTAKENDATE1}).equals("10")),31,
-											IF((new SimpleDateFormat("M").format($V{ACTIONTAKENDATE1}).equals("11")),30,31)
+			IF((new SimpleDateFormat("M").format($V{MTH}).equals("3")),31,
+				IF((new SimpleDateFormat("M").format($V{MTH}).equals("4")),30,
+					IF((new SimpleDateFormat("M").format($V{MTH}).equals("5")),31,
+						IF((new SimpleDateFormat("M").format($V{MTH}).equals("6")),30,
+							IF((new SimpleDateFormat("M").format($V{MTH}).equals("7")),31,
+								IF((new SimpleDateFormat("M").format($V{MTH}).equals("8")),31,
+									IF((new SimpleDateFormat("M").format($V{MTH}).equals("9")),30,
+										IF((new SimpleDateFormat("M").format($V{MTH}).equals("10")),31,
+											IF((new SimpleDateFormat("M").format($V{MTH}).equals("11")),30,31)
 										))
 								)
 							)
@@ -1826,11 +1825,11 @@ FROM DUAL]]>
 	)
 		)]]></hyperlinkParameterExpression>
 							</hyperlinkParameter>
-							<hyperlinkParameter name="param_WORKFLOWNAME">
+							<hyperlinkParameter name="param_WorkflowName">
 								<hyperlinkParameterExpression><![CDATA[$V{WorkflowName}]]></hyperlinkParameterExpression>
 							</hyperlinkParameter>
 							<hyperlinkParameter name="param_PROJECTNAME">
-								<hyperlinkParameterExpression><![CDATA[$V{All project Names}]]></hyperlinkParameterExpression>
+								<hyperlinkParameterExpression><![CDATA[$V{All_ProjectName}]]></hyperlinkParameterExpression>
 							</hyperlinkParameter>
 							<hyperlinkParameter name="param_PROTOCOLNAME">
 								<hyperlinkParameterExpression><![CDATA[]]></hyperlinkParameterExpression>
@@ -1838,21 +1837,21 @@ FROM DUAL]]>
 						</textField>
 					</cellContents>
 				</crosstabCell>
-				<crosstabCell width="50" height="20" columnTotalGroup="ACTIONTAKENDATE1">
+				<crosstabCell width="50" height="20" columnTotalGroup="MTH">
 					<cellContents mode="Opaque" style="Crosstab 6_CT">
 						<textField>
 							<reportElement x="0" y="0" width="50" height="20" isRemoveLineWhenBlank="true" forecolor="#FFFFFF" uuid="65568acd-c9b4-43d4-b820-e349801eb03f">
-								<printWhenExpression><![CDATA[$V{ACTIONTYPE1}.equals("REMOVE")]]></printWhenExpression>
+								<printWhenExpression><![CDATA[$V{PROTOCOL}.equals("REMOVE")]]></printWhenExpression>
 							</reportElement>
 							<textElement verticalAlignment="Middle">
 								<font size="8"/>
 								<paragraph leftIndent="5"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$V{ACTIONTAKENDATE_MEASURE1}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$V{ACTION_MEASURE}]]></textFieldExpression>
 						</textField>
 					</cellContents>
 				</crosstabCell>
-				<crosstabCell width="50" height="20" rowTotalGroup="ACTIONTYPE1">
+				<crosstabCell width="50" height="20" rowTotalGroup="PROTOCOL">
 					<cellContents mode="Opaque" style="Crosstab 6_CT">
 						<textField>
 							<reportElement x="0" y="0" width="50" height="20" forecolor="#FFFFFF" uuid="931478e2-ece9-4279-9962-b860e0302579"/>
@@ -1860,11 +1859,11 @@ FROM DUAL]]>
 								<font size="8"/>
 								<paragraph leftIndent="5"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$V{ACTIONTAKENDATE_MEASURE1}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$V{ACTION_MEASURE}]]></textFieldExpression>
 						</textField>
 					</cellContents>
 				</crosstabCell>
-				<crosstabCell width="50" height="20" rowTotalGroup="ACTIONTYPE1" columnTotalGroup="ACTIONTAKENDATE1">
+				<crosstabCell width="50" height="20" rowTotalGroup="PROTOCOL" columnTotalGroup="MTH">
 					<cellContents mode="Opaque" style="Crosstab 6_CT">
 						<textField>
 							<reportElement x="0" y="0" width="50" height="20" forecolor="#FFFFFF" uuid="d1606717-69eb-43cd-bc7d-a8326cfcac45"/>
@@ -1872,14 +1871,14 @@ FROM DUAL]]>
 								<font size="8"/>
 								<paragraph leftIndent="5"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$V{ACTIONTAKENDATE_MEASURE1}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$V{ACTION_MEASURE}]]></textFieldExpression>
 						</textField>
 					</cellContents>
 				</crosstabCell>
 			</crosstab>
 			<crosstab>
 				<reportElement positionType="Float" mode="Transparent" x="5" y="86" width="792" height="20" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF" uuid="dedc8921-461a-4b79-8c22-208d3925f7c1">
-					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="Report amend ct"/>
+					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="Report_Amend"/>
 				</reportElement>
 				<crosstabParameter name="Parameter1"/>
 				<crosstabDataset>
@@ -1892,7 +1891,7 @@ FROM DUAL]]>
 						</datasetRun>
 					</dataset>
 				</crosstabDataset>
-				<rowGroup name="DISPLAYNAME1" width="360">
+				<rowGroup name="STEP" width="360">
 					<bucket class="java.lang.String">
 						<bucketExpression><![CDATA[$F{DISPLAYNAME}]]></bucketExpression>
 					</bucket>
@@ -1902,7 +1901,7 @@ FROM DUAL]]>
 								<reportElement mode="Opaque" x="110" y="0" width="190" height="20" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF" uuid="bdb8ad6f-f788-491c-8791-7fd608fc8a57">
 									<property name="local_mesure_unitwidth" value="pixel"/>
 									<property name="com.jaspersoft.studio.unit.width" value="px"/>
-									<printWhenExpression><![CDATA[$V{ROW_COUNT} > 1 ? ($V{DISPLAYNAME1} != null ? true : false) : true]]></printWhenExpression>
+									<printWhenExpression><![CDATA[$V{ROW_COUNT} > 1 ? ($V{STEP} != null ? true : false) : true]]></printWhenExpression>
 								</reportElement>
 								<box>
 									<leftPen lineWidth="0.5"/>
@@ -1917,7 +1916,7 @@ FROM DUAL]]>
 								<reportElement mode="Opaque" x="300" y="0" width="60" height="20" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF" uuid="6a6ba5d3-577a-4cf4-aea3-7cc9f356e030">
 									<property name="local_mesure_unitwidth" value="pixel"/>
 									<property name="com.jaspersoft.studio.unit.width" value="px"/>
-									<printWhenExpression><![CDATA[$V{ROW_COUNT} > 1 ? ($V{DISPLAYNAME1} != null ? true : false) : true]]></printWhenExpression>
+									<printWhenExpression><![CDATA[$V{ROW_COUNT} > 1 ? ($V{STEP} != null ? true : false) : true]]></printWhenExpression>
 								</reportElement>
 								<box>
 									<leftPen lineWidth="0.5"/>
@@ -1930,7 +1929,7 @@ FROM DUAL]]>
 							</textField>
 							<textField>
 								<reportElement isPrintRepeatedValues="false" mode="Opaque" x="0" y="0" width="110" height="20" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF" uuid="e9776ab4-ae84-4660-9534-752221e13310">
-									<printWhenExpression><![CDATA[$V{ROW_COUNT} > 1 ? ($V{DISPLAYNAME1} != null ? true : false) : true]]></printWhenExpression>
+									<printWhenExpression><![CDATA[$V{ROW_COUNT} > 1 ? ($V{STEP} != null ? true : false) : true]]></printWhenExpression>
 								</reportElement>
 								<box>
 									<rightPen lineWidth="0.5"/>
@@ -1947,7 +1946,7 @@ FROM DUAL]]>
 						<cellContents mode="Opaque" style="Crosstab 8_CT"/>
 					</crosstabTotalRowHeader>
 				</rowGroup>
-				<columnGroup name="MON1" height="0">
+				<columnGroup name="MTH" height="0">
 					<bucket class="java.sql.Timestamp">
 						<bucketExpression><![CDATA[$F{MON}]]></bucketExpression>
 					</bucket>
@@ -1958,10 +1957,10 @@ FROM DUAL]]>
 						<cellContents mode="Opaque" style="Crosstab 8_CT"/>
 					</crosstabTotalColumnHeader>
 				</columnGroup>
-				<measure name="UDFVAL_MEASURE1" class="java.lang.Integer" calculation="Sum">
+				<measure name="AMEND_MEASURE" class="java.lang.Integer" calculation="Sum">
 					<measureExpression><![CDATA[$F{UDFVAL} == 1 && $F{YEAR}.equals($P{amendYear}) ? new Integer(1) : new Integer(0)]]></measureExpression>
 				</measure>
-				<measure name="Total amends" class="java.lang.Double" calculation="Sum">
+				<measure name="AMEND_COUNT" class="java.lang.Double" calculation="Sum">
 					<measureExpression><![CDATA[$F{YEAR}.equals($P{amendYear}) ? new Integer(1) : new Integer(0)]]></measureExpression>
 				</measure>
 				<crosstabCell width="36" height="20">
@@ -1971,36 +1970,37 @@ FROM DUAL]]>
 								<property name="local_mesure_unitx" value="pixel"/>
 								<property name="com.jaspersoft.studio.unit.width" value="px"/>
 								<property name="local_mesure_unitwidth" value="pixel"/>
-								<printWhenExpression><![CDATA[$V{ROW_COUNT} > 1 ? ($V{DISPLAYNAME1} != null ? true : false) : true]]></printWhenExpression>
+								<printWhenExpression><![CDATA[$V{ROW_COUNT} > 1 ? ($V{STEP} != null ? true : false) : true]]></printWhenExpression>
 							</reportElement>
 							<textElement verticalAlignment="Middle">
 								<font size="7"/>
 								<paragraph leftIndent="5"/>
 							</textElement>
-							<textFieldExpression><![CDATA[Double.isNaN($V{UDFVAL_MEASURE1} / $V{Total amends}) ? 0.0 : $V{UDFVAL_MEASURE1} / $V{Total amends}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[Double.isNaN($V{AMEND_MEASURE} / $V{AMEND_COUNT}) ? 0.0 : $V{AMEND_MEASURE} / $V{AMEND_COUNT}
+]]></textFieldExpression>
 						</textField>
 					</cellContents>
 				</crosstabCell>
-				<crosstabCell width="0" height="20" columnTotalGroup="MON1">
+				<crosstabCell width="0" height="20" columnTotalGroup="MTH">
 					<cellContents mode="Opaque" style="Crosstab 13_CT"/>
 				</crosstabCell>
-				<crosstabCell width="30" height="0" rowTotalGroup="DISPLAYNAME1">
+				<crosstabCell width="30" height="0" rowTotalGroup="STEP">
 					<cellContents mode="Opaque" style="Crosstab 13_CT"/>
 				</crosstabCell>
-				<crosstabCell width="0" height="0" rowTotalGroup="DISPLAYNAME1" columnTotalGroup="MON1">
+				<crosstabCell width="0" height="0" rowTotalGroup="STEP" columnTotalGroup="MTH">
 					<cellContents mode="Opaque" style="Crosstab 13_CT"/>
 				</crosstabCell>
 			</crosstab>
 			<crosstab>
 				<reportElement key="" positionType="Float" x="5" y="26" width="792" height="20" isRemoveLineWhenBlank="true" uuid="afb7d9cf-cdab-45e7-98f2-cea9967e2b1c">
-					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="TAT ct"/>
+					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="Turn-Around-Time"/>
 				</reportElement>
 				<box>
 					<bottomPen lineWidth="0.5"/>
 				</box>
 				<crosstabDataset>
 					<dataset>
-						<datasetRun subDataset="Turn-Around-Time" uuid="4644b781-a3d2-45b4-b62b-e60a17736ee8">
+						<datasetRun subDataset="TurnAroundTime" uuid="4644b781-a3d2-45b4-b62b-e60a17736ee8">
 							<datasetParameter name="turnAroundYear">
 								<datasetParameterExpression><![CDATA[$P{Year}]]></datasetParameterExpression>
 							</datasetParameter>
@@ -2008,7 +2008,7 @@ FROM DUAL]]>
 						</datasetRun>
 					</dataset>
 				</crosstabDataset>
-				<rowGroup name="WFNAME1" width="360">
+				<rowGroup name="WFNAME" width="360">
 					<bucket class="java.lang.String">
 						<bucketExpression><![CDATA[$F{WFNAME}]]></bucketExpression>
 					</bucket>
@@ -2018,7 +2018,7 @@ FROM DUAL]]>
 								<reportElement mode="Opaque" x="110" y="0" width="190" height="20" isRemoveLineWhenBlank="true" backcolor="#F0F8FF" uuid="c0a01bd2-0f5e-4c96-b125-fd6e71f81b44">
 									<property name="local_mesure_unitwidth" value="pixel"/>
 									<property name="com.jaspersoft.studio.unit.width" value="px"/>
-									<printWhenExpression><![CDATA[$V{ROW_COUNT} > 1 ? ($V{WFNAME1} != null ? true : false) : true]]></printWhenExpression>
+									<printWhenExpression><![CDATA[$V{ROW_COUNT} > 1 ? ($V{WFNAME} != null ? true : false) : true]]></printWhenExpression>
 								</reportElement>
 								<box>
 									<topPen lineWidth="0.5"/>
@@ -2038,7 +2038,7 @@ FROM DUAL]]>
 									<property name="com.jaspersoft.studio.unit.width" value="px"/>
 									<property name="local_mesure_unitheight" value="pixel"/>
 									<property name="com.jaspersoft.studio.unit.height" value="px"/>
-									<printWhenExpression><![CDATA[$V{ROW_COUNT} > 1 ? ($V{WFNAME1} != null ? true : false) : true]]></printWhenExpression>
+									<printWhenExpression><![CDATA[$V{ROW_COUNT} > 1 ? ($V{WFNAME} != null ? true : false) : true]]></printWhenExpression>
 								</reportElement>
 								<box>
 									<topPen lineWidth="0.5"/>
@@ -2054,7 +2054,7 @@ FROM DUAL]]>
 							</textField>
 							<textField>
 								<reportElement mode="Opaque" x="0" y="0" width="110" height="20" backcolor="#F0F8FF" uuid="632f02a9-fcb1-49ce-9b33-2f6d197b209a">
-									<printWhenExpression><![CDATA[$V{ROW_COUNT} > 1 ? ($V{WFNAME1} != null ? true : false) : true]]></printWhenExpression>
+									<printWhenExpression><![CDATA[$V{ROW_COUNT} > 1 ? ($V{WFNAME} != null ? true : false) : true]]></printWhenExpression>
 								</reportElement>
 								<box>
 									<topPen lineWidth="0.5"/>
@@ -2074,12 +2074,12 @@ FROM DUAL]]>
 						<cellContents mode="Opaque" style="Crosstab 10_CT">
 							<staticText>
 								<reportElement x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="c6b4def4-8ca8-4578-b78d-f2c200a39d55"/>
-								<text><![CDATA[Total WFNAME1]]></text>
+								<text><![CDATA[Total WFNAME]]></text>
 							</staticText>
 						</cellContents>
 					</crosstabTotalRowHeader>
 				</rowGroup>
-				<columnGroup name="MTH1" height="0">
+				<columnGroup name="MTH" height="0">
 					<bucket class="java.sql.Timestamp">
 						<bucketExpression><![CDATA[$F{DATERUN}]]></bucketExpression>
 					</bucket>
@@ -2090,15 +2090,15 @@ FROM DUAL]]>
 						<cellContents mode="Opaque" style="Crosstab 10_CT">
 							<staticText>
 								<reportElement x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="74aa811a-2e40-4684-9406-11152ae9994e"/>
-								<text><![CDATA[Total MTH1]]></text>
+								<text><![CDATA[Total MTH]]></text>
 							</staticText>
 						</cellContents>
 					</crosstabTotalColumnHeader>
 				</columnGroup>
-				<measure name="SMPNAME_MEASURE1" class="java.lang.Double" calculation="Sum">
+				<measure name="SMPNAME_MEASURE" class="java.lang.Double" calculation="Sum">
 					<measureExpression><![CDATA[Double.parseDouble( $F{DAYSTAKEN} ) >= 28 && $F{YEAR}.equals($P{turnAroundYear}) ? new Integer(1) : new Integer(0)]]></measureExpression>
 				</measure>
-				<measure name="Measure1" class="java.lang.Double" calculation="Sum">
+				<measure name="SMP_COUNT" class="java.lang.Double" calculation="Sum">
 					<measureExpression><![CDATA[$F{YEAR}.equals($P{turnAroundYear}) ? new Integer(1) : new Integer(0)]]></measureExpression>
 				</measure>
 				<crosstabCell width="36" height="20">
@@ -2107,7 +2107,7 @@ FROM DUAL]]>
 							<reportElement mode="Opaque" x="0" y="0" width="36" height="20" isRemoveLineWhenBlank="true" backcolor="#F0F8FF" uuid="ef11b746-48ee-46d0-8a26-7277ae0ffe36">
 								<property name="local_mesure_unitwidth" value="pixel"/>
 								<property name="com.jaspersoft.studio.unit.width" value="px"/>
-								<printWhenExpression><![CDATA[$V{ROW_COUNT} > 1 ? ($V{WFNAME1} != null ? true : false) : true]]></printWhenExpression>
+								<printWhenExpression><![CDATA[$V{ROW_COUNT} > 1 ? ($V{WFNAME} != null ? true : false) : true]]></printWhenExpression>
 							</reportElement>
 							<box>
 								<topPen lineWidth="0.5"/>
@@ -2119,29 +2119,29 @@ FROM DUAL]]>
 								<font size="7"/>
 								<paragraph leftIndent="5"/>
 							</textElement>
-							<textFieldExpression><![CDATA[Double.isNaN($V{SMPNAME_MEASURE1} / $V{Measure1}
-)? 0.0 : $V{SMPNAME_MEASURE1} / $V{Measure1}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[Double.isNaN($V{SMPNAME_MEASURE} / $V{SMP_COUNT}
+)? 0.0 : $V{SMPNAME_MEASURE} / $V{SMP_COUNT}]]></textFieldExpression>
 							<hyperlinkParameter name="_report">
 								<hyperlinkParameterExpression><![CDATA["/reports/LIMS_sampleFailure_report/SampleTurnAroundTime"]]></hyperlinkParameterExpression>
 							</hyperlinkParameter>
 							<hyperlinkParameter name="Date_From">
-								<hyperlinkParameterExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").format($V{MTH1})]]></hyperlinkParameterExpression>
+								<hyperlinkParameterExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").format($V{MTH})]]></hyperlinkParameterExpression>
 							</hyperlinkParameter>
 							<hyperlinkParameter name="Date_To">
-								<hyperlinkParameterExpression><![CDATA[new SimpleDateFormat("yyyy-MM").format($V{MTH1}) + "-" + (
-	IF((new SimpleDateFormat("M").format($V{MTH1}).equals("1")),31,
-		IF((new SimpleDateFormat("M").format($V{MTH1}).equals("2")),
-				(IF($V{MTH1}.getYear()%4 == 0,29,28)),
+								<hyperlinkParameterExpression><![CDATA[new SimpleDateFormat("yyyy-MM").format($V{MTH}) + "-" + (
+	IF((new SimpleDateFormat("M").format($V{MTH}).equals("1")),31,
+		IF((new SimpleDateFormat("M").format($V{MTH}).equals("2")),
+				(IF($V{MTH}.getYear()%4 == 0,29,28)),
 				
-			IF((new SimpleDateFormat("M").format($V{MTH1}).equals("3")),31,
-				IF((new SimpleDateFormat("M").format($V{MTH1}).equals("4")),30,
-					IF((new SimpleDateFormat("M").format($V{MTH1}).equals("5")),31,
-						IF((new SimpleDateFormat("M").format($V{MTH1}).equals("6")),30,
-							IF((new SimpleDateFormat("M").format($V{MTH1}).equals("7")),31,
-								IF((new SimpleDateFormat("M").format($V{MTH1}).equals("8")),31,
-									IF((new SimpleDateFormat("M").format($V{MTH1}).equals("9")),30,
-										IF((new SimpleDateFormat("M").format($V{MTH1}).equals("10")),31,
-											IF((new SimpleDateFormat("M").format($V{MTH1}).equals("11")),30,31)
+			IF((new SimpleDateFormat("M").format($V{MTH}).equals("3")),31,
+				IF((new SimpleDateFormat("M").format($V{MTH}).equals("4")),30,
+					IF((new SimpleDateFormat("M").format($V{MTH}).equals("5")),31,
+						IF((new SimpleDateFormat("M").format($V{MTH}).equals("6")),30,
+							IF((new SimpleDateFormat("M").format($V{MTH}).equals("7")),31,
+								IF((new SimpleDateFormat("M").format($V{MTH}).equals("8")),31,
+									IF((new SimpleDateFormat("M").format($V{MTH}).equals("9")),30,
+										IF((new SimpleDateFormat("M").format($V{MTH}).equals("10")),31,
+											IF((new SimpleDateFormat("M").format($V{MTH}).equals("11")),30,31)
 										))
 								)
 							)
@@ -2157,27 +2157,27 @@ FROM DUAL]]>
 						</textField>
 					</cellContents>
 				</crosstabCell>
-				<crosstabCell width="60" height="20" columnTotalGroup="MTH1">
+				<crosstabCell width="60" height="20" columnTotalGroup="MTH">
 					<cellContents mode="Opaque" style="Crosstab 10_CT">
 						<textField>
 							<reportElement x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="d8bdbdc8-1393-43e9-acdc-9ea34992d13b"/>
-							<textFieldExpression><![CDATA[$V{SMPNAME_MEASURE1}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$V{SMPNAME_MEASURE}]]></textFieldExpression>
 						</textField>
 					</cellContents>
 				</crosstabCell>
-				<crosstabCell width="60" height="20" rowTotalGroup="WFNAME1">
+				<crosstabCell width="60" height="20" rowTotalGroup="WFNAME">
 					<cellContents mode="Opaque" style="Crosstab 10_CT">
 						<textField>
 							<reportElement x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="76678184-22d1-462b-95fe-c48dd8a4870e"/>
-							<textFieldExpression><![CDATA[$V{SMPNAME_MEASURE1}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$V{SMPNAME_MEASURE}]]></textFieldExpression>
 						</textField>
 					</cellContents>
 				</crosstabCell>
-				<crosstabCell width="60" height="20" rowTotalGroup="WFNAME1" columnTotalGroup="MTH1">
+				<crosstabCell width="60" height="20" rowTotalGroup="WFNAME" columnTotalGroup="MTH">
 					<cellContents mode="Opaque" style="Crosstab 10_CT">
 						<textField>
 							<reportElement x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="ac72fd5a-7aee-41d2-a8f9-ffe1cb3f98ec"/>
-							<textFieldExpression><![CDATA[$V{SMPNAME_MEASURE1}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$V{SMPNAME_MEASURE}]]></textFieldExpression>
 						</textField>
 					</cellContents>
 				</crosstabCell>
@@ -2429,11 +2429,11 @@ FROM DUAL]]>
 			</frame>
 			<crosstab>
 				<reportElement positionType="Float" x="5" y="106" width="792" height="20" uuid="11366ea7-2744-4c14-8228-025d60f366fb">
-					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="VCS coverage and +ve mutation ct"/>
+					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="VCS_Coverage_and_+ve Mutation"/>
 				</reportElement>
 				<crosstabDataset>
 					<dataset>
-						<datasetRun subDataset="bclData" uuid="c61fc493-cde6-4d0e-b5aa-cb6053045ca1">
+						<datasetRun subDataset="BCLData" uuid="c61fc493-cde6-4d0e-b5aa-cb6053045ca1">
 							<datasetParameter name="bclYear">
 								<datasetParameterExpression><![CDATA[$P{Year}]]></datasetParameterExpression>
 							</datasetParameter>
@@ -2441,7 +2441,7 @@ FROM DUAL]]>
 						</datasetRun>
 					</dataset>
 				</crosstabDataset>
-				<rowGroup name="VAL1" width="360">
+				<rowGroup name="UDFNAME" width="360">
 					<bucket class="java.lang.String">
 						<bucketExpression><![CDATA[$F{UDFNAME}]]></bucketExpression>
 					</bucket>
@@ -2499,7 +2499,7 @@ FROM DUAL]]>
 									<property name="local_mesure_unitheight" value="pixel"/>
 									<property name="local_mesure_unitwidth" value="pixel"/>
 									<property name="com.jaspersoft.studio.unit.width" value="px"/>
-									<printWhenExpression><![CDATA[$V{VAL1} != null]]></printWhenExpression>
+									<printWhenExpression><![CDATA[$V{UDFNAME} != null]]></printWhenExpression>
 								</reportElement>
 								<box>
 									<leftPen lineWidth="0.5"/>
@@ -2509,7 +2509,7 @@ FROM DUAL]]>
 									<font size="7"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$V{VAL1}.equals("VCS_Coverage") ? " VCS coverage (FAIL)" : "% of positive mutation"]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$V{UDFNAME}.equals("VCS_Coverage") ? " VCS coverage (FAIL)" : "% of positive mutation"]]></textFieldExpression>
 							</textField>
 							<textField>
 								<reportElement x="300" y="0" width="60" height="20" isRemoveLineWhenBlank="true" uuid="2498a3e3-e40b-4ef2-889b-0c5e13e8c804">
@@ -2517,7 +2517,7 @@ FROM DUAL]]>
 									<property name="com.jaspersoft.studio.unit.width" value="px"/>
 									<property name="local_mesure_unitheight" value="pixel"/>
 									<property name="com.jaspersoft.studio.unit.height" value="px"/>
-									<printWhenExpression><![CDATA[$V{VAL1} != null]]></printWhenExpression>
+									<printWhenExpression><![CDATA[$V{UDFNAME} != null]]></printWhenExpression>
 								</reportElement>
 								<box>
 									<leftPen lineWidth="0.5"/>
@@ -2535,7 +2535,7 @@ FROM DUAL]]>
 									<property name="com.jaspersoft.studio.unit.width" value="px"/>
 									<property name="local_mesure_unitheight" value="pixel"/>
 									<property name="com.jaspersoft.studio.unit.height" value="px"/>
-									<printWhenExpression><![CDATA[$V{VAL1} != null]]></printWhenExpression>
+									<printWhenExpression><![CDATA[$V{UDFNAME} != null]]></printWhenExpression>
 								</reportElement>
 								<box>
 									<leftPen lineWidth="0.5"/>
@@ -2545,7 +2545,7 @@ FROM DUAL]]>
 									<font size="7"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$V{VAL1}.equals("VCS_Coverage") ? "VCS Coverage Average" : "Positive Mutation Rate"]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$V{UDFNAME}.equals("VCS_Coverage") ? "VCS Coverage Average" : "Positive Mutation Rate"]]></textFieldExpression>
 							</textField>
 						</cellContents>
 					</crosstabRowHeader>
@@ -2553,12 +2553,12 @@ FROM DUAL]]>
 						<cellContents mode="Opaque" style="Crosstab 24_CT">
 							<staticText>
 								<reportElement x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="a5ff33fb-7baa-4552-a52c-aaad2671d5a4"/>
-								<text><![CDATA[Total VAL1]]></text>
+								<text><![CDATA[Total UDFNAME]]></text>
 							</staticText>
 						</cellContents>
 					</crosstabTotalRowHeader>
 				</rowGroup>
-				<columnGroup name="MON1" height="0">
+				<columnGroup name="MTH" height="0">
 					<bucket class="java.sql.Timestamp">
 						<bucketExpression><![CDATA[$F{MON}]]></bucketExpression>
 					</bucket>
@@ -2569,15 +2569,15 @@ FROM DUAL]]>
 						<cellContents mode="Opaque" style="Crosstab 24_CT">
 							<staticText>
 								<reportElement x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="d185b0f0-26e6-4869-950b-40adfa4ddc35"/>
-								<text><![CDATA[Total MON1]]></text>
+								<text><![CDATA[Total MTH]]></text>
 							</staticText>
 						</cellContents>
 					</crosstabTotalColumnHeader>
 				</columnGroup>
-				<measure name="POSITIVE_MUTATION_MEASURE1" class="java.lang.Double" calculation="Sum">
+				<measure name="UDFVAL_MEASURE" class="java.lang.Double" calculation="Sum">
 					<measureExpression><![CDATA[$F{UDFVAL}.equals("FAIL") && $F{YEAR}.equals($P{bclYear}) ? new Integer(1) : new Integer(0)]]></measureExpression>
 				</measure>
-				<measure name="Total Count" class="java.lang.Double" calculation="Sum">
+				<measure name="UDFVAL_COUNT" class="java.lang.Double" calculation="Sum">
 					<measureExpression><![CDATA[$F{YEAR}.equals($P{bclYear}) ? new Integer(1) : new Integer(0)]]></measureExpression>
 				</measure>
 				<crosstabCell width="36" height="20">
@@ -2593,7 +2593,7 @@ FROM DUAL]]>
 						<textField pattern="#,##0.0%;(#,##0.0">
 							<reportElement x="0" y="0" width="36" height="20" isRemoveLineWhenBlank="true" uuid="ced2c693-f64b-4f61-9fcc-a8f1c1d5fa49">
 								<property name="local_mesure_unitwidth" value="pixel"/>
-								<printWhenExpression><![CDATA[$V{VAL1} != null]]></printWhenExpression>
+								<printWhenExpression><![CDATA[$V{UDFNAME} != null]]></printWhenExpression>
 							</reportElement>
 							<box>
 								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2605,31 +2605,31 @@ FROM DUAL]]>
 								<font size="7"/>
 								<paragraph leftIndent="5"/>
 							</textElement>
-							<textFieldExpression><![CDATA[Double.isNaN($V{POSITIVE_MUTATION_MEASURE1} / ($V{Total Count} / $V{ROW_COUNT})) ? 0.0 : $V{POSITIVE_MUTATION_MEASURE1} / ($V{Total Count} / $V{ROW_COUNT})]]></textFieldExpression>
+							<textFieldExpression><![CDATA[Double.isNaN($V{UDFVAL_MEASURE} / ($V{UDFVAL_COUNT} / $V{ROW_COUNT})) ? 0.0 : $V{UDFVAL_MEASURE} / ($V{UDFVAL_COUNT} / $V{ROW_COUNT})]]></textFieldExpression>
 						</textField>
 					</cellContents>
 				</crosstabCell>
-				<crosstabCell width="60" height="20" columnTotalGroup="MON1">
+				<crosstabCell width="60" height="20" columnTotalGroup="MTH">
 					<cellContents mode="Opaque" style="Crosstab 24_CT">
 						<textField>
 							<reportElement x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="7af9ac58-0679-46ea-ba3c-684c5d30ad24"/>
-							<textFieldExpression><![CDATA[$V{POSITIVE_MUTATION_MEASURE1}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$V{UDFVAL_MEASURE}]]></textFieldExpression>
 						</textField>
 					</cellContents>
 				</crosstabCell>
-				<crosstabCell width="60" height="20" rowTotalGroup="VAL1">
+				<crosstabCell width="60" height="20" rowTotalGroup="UDFNAME">
 					<cellContents mode="Opaque" style="Crosstab 24_CT">
 						<textField>
 							<reportElement x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="7d78ccaf-4e78-4be2-aaf9-ebbe31c04312"/>
-							<textFieldExpression><![CDATA[$V{POSITIVE_MUTATION_MEASURE1}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$V{UDFVAL_MEASURE}]]></textFieldExpression>
 						</textField>
 					</cellContents>
 				</crosstabCell>
-				<crosstabCell width="60" height="20" rowTotalGroup="VAL1" columnTotalGroup="MON1">
+				<crosstabCell width="60" height="20" rowTotalGroup="UDFNAME" columnTotalGroup="MTH">
 					<cellContents mode="Opaque" style="Crosstab 24_CT">
 						<textField>
 							<reportElement x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="01e31ea0-6097-41bf-861c-315344c483aa"/>
-							<textFieldExpression><![CDATA[$V{POSITIVE_MUTATION_MEASURE1}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$V{UDFVAL_MEASURE}]]></textFieldExpression>
 						</textField>
 					</cellContents>
 				</crosstabCell>
