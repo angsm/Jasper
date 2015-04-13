@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.0.3.final using JasperReports Library version 6.0.3  -->
-<!-- 2015-04-10T14:55:09 -->
+<!-- 2015-04-13T15:07:28 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Summary report" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="888975be-024d-42e5-a907-abfa30d67ac8">
 	<property name="ireport.jasperserver.url" value="http://dlap65v:8080/jasperserver/"/>
 	<property name="ireport.jasperserver.user" value="jasperadmin|"/>
-	<property name="ireport.jasperserver.report.resource" value="/reports/WIP_Reports/TEST_Summaryreport_files/main_jrxml"/>
-	<property name="ireport.jasperserver.reportUnit" value="/reports/WIP_Reports/TEST_Summaryreport"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="limsDB - RW"/>
+	<property name="ireport.jasperserver.report.resource" value="/reports/LIMS_sampleFailure_report/Summaryreport_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/LIMS_sampleFailure_report/Summaryreport"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="CopyOflimsDB - R"/>
 	<style name="Crosstab_CH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -1305,61 +1305,54 @@ ON TO_CHAR(RUN, 'MON') = M.MTH]]>
   artName,
   proDate,
   YEAR,
-  TO_DATE(M.MTH, 'MON') AS MON
-FROM
-  (SELECT udf.NAME                   AS udfName,
-    aus.TEXT7                        AS CVS_Coverage,
-    aus.TEXT3                        AS Positive_Mutation,
-    ARTIFACT.NAME                    AS artName,
-    PROCESS.DATERUN                  AS proDate,
-    TO_CHAR(PROCESS.DATERUN, 'YYYY') AS YEAR,
-    PROCESS.WORKSTATUS               AS proStat,
-    aus.ROWINDEX AS rowIdx,
-    
-    CASE
-      WHEN (udf.NAME    = 'Positive_Mutation' AND udf.ROWINDEX = 2)
-      THEN aus.TEXT8
-      WHEN (udf.NAME    = 'VCS_Coverage' AND udf.ROWINDEX = 1)
-      THEN aus.TEXT7
-    END                 AS UDFVal
-    
-  FROM udf
-  INNER JOIN artifactudfstorage aus
-  ON udf.ROWINDEX = aus.ROWINDEX
-  AND udf.name = 'VCS_Coverage'
-  OR udf.name = 'VCS_Coverage'
-  OR udf.name = 'Positive_Mutation'
+  TO_DATE(M.MTH, 'MON') AS MON,
+  proStat
   
-  INNER JOIN ARTIFACT
-  ON ARTIFACT.ARTIFACTID = aus.ARTIFACTID
-  INNER JOIN OUTPUTMAPPING
-  ON OUTPUTMAPPING.OUTPUTARTIFACTID = ARTIFACT.ARTIFACTID
-  INNER JOIN PROCESSIOTRACKER
-  ON PROCESSIOTRACKER.TRACKERID = OUTPUTMAPPING.TRACKERID
-  INNER JOIN PROCESS
-  ON PROCESS.PROCESSID = PROCESSIOTRACKER.PROCESSID
-  INNER JOIN PROCESSTYPE
-  ON PROCESSTYPE.TYPEID       = PROCESS.TYPEID
-  WHERE udf.UDTID            IS NULL
-  AND PROCESSTYPE.DISPLAYNAME = 'Bcl Conversion &'
+  FROM
+(
+SELECT ARTIFACT_UDF_VIEW."udfvalue" AS UDFVal, 
+  ARTIFACT_UDF_VIEW."udfname" as udfName,
+  ARTIFACT.NAME                    AS artName,
+  PROCESS.DATERUN                  AS proDate,
+  TO_CHAR(PROCESS.DATERUN, 'YYYY') AS YEAR,
+  PROCESS.WORKSTATUS               AS proStat
+  
+FROM ARTIFACT_UDF_VIEW
+INNER JOIN ARTIFACT
+ON ARTIFACT.ARTIFACTID = ARTIFACT_UDF_VIEW.ARTIFACTID
+
+INNER JOIN OUTPUTMAPPING
+ON ARTIFACT.ARTIFACTID = OUTPUTMAPPING.OUTPUTARTIFACTID
+INNER JOIN PROCESSIOTRACKER
+ON PROCESSIOTRACKER.TRACKERID = OUTPUTMAPPING.TRACKERID
+INNER JOIN PROCESS
+ON PROCESS.PROCESSID = PROCESSIOTRACKER.PROCESSID
+INNER JOIN PROCESSTYPE
+ON PROCESSTYPE.TYPEID = PROCESS.TYPEID
+
+WHERE PROCESSTYPE.DISPLAYNAME = 'Bcl Conversion &'
     || ' Demultiplexing (Illumina SBS) 4.0 gseq cluster v1.0.0'
-    
-  ORDER BY udf.SEQUENCENUMBER
-  )
+    AND (ARTIFACT_UDF_VIEW."udfname" = 'Positive_Mutation' OR ARTIFACT_UDF_VIEW."udfname" = 'VCS_Coverage' OR ARTIFACT_UDF_VIEW."udfname" IS NULL)
+	AND (PROCESS.WORKSTATUS = 'COMPLETE' OR PROCESS.WORKSTATUS IS NULL)
+	
+)
+
 FULL OUTER JOIN
   (SELECT TO_CHAR(add_months(SysDate, (Level - TO_CHAR(SysDate, 'MM'))), 'MON') AS MTH
   FROM dual
     CONNECT BY Level <= 12
   ) M
-ON TO_CHAR(proDate, 'MON') = M.MTH
-WHERE (proStat = 'COMPLETE' OR proStat IS NULL)]]>
+ON TO_CHAR(proDate, 'MON') = M.MTH]]>
 		</queryString>
 		<field name="ARTNAME" class="java.lang.String"/>
-		<field name="PRODATE" class="java.sql.Timestamp"/>
+		<field name="PRODATE" class="java.sql.Timestamp">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
 		<field name="YEAR" class="java.lang.String"/>
 		<field name="MON" class="java.sql.Timestamp"/>
 		<field name="UDFNAME" class="java.lang.String"/>
 		<field name="UDFVAL" class="java.lang.String"/>
+		<field name="PROSTAT" class="java.lang.String"/>
 	</subDataset>
 	<parameter name="Year" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
@@ -1614,7 +1607,7 @@ FROM DUAL]]>
 							<hyperlinkParameter name="param_PROJECTNAME">
 								<hyperlinkParameterExpression><![CDATA[$V{All_ProjectName}]]></hyperlinkParameterExpression>
 							</hyperlinkParameter>
-							<hyperlinkParameter name="param_WorkflowName">
+							<hyperlinkParameter name="param_WORKFLOWNAME">
 								<hyperlinkParameterExpression><![CDATA[$V{WorkflowName}]]></hyperlinkParameterExpression>
 							</hyperlinkParameter>
 							<hyperlinkParameter name="param_STEPNAME">
@@ -1825,7 +1818,7 @@ FROM DUAL]]>
 	)
 		)]]></hyperlinkParameterExpression>
 							</hyperlinkParameter>
-							<hyperlinkParameter name="param_WorkflowName">
+							<hyperlinkParameter name="param_WORKFLOWNAME">
 								<hyperlinkParameterExpression><![CDATA[$V{WorkflowName}]]></hyperlinkParameterExpression>
 							</hyperlinkParameter>
 							<hyperlinkParameter name="param_PROJECTNAME">
@@ -1976,8 +1969,7 @@ FROM DUAL]]>
 								<font size="7"/>
 								<paragraph leftIndent="5"/>
 							</textElement>
-							<textFieldExpression><![CDATA[Double.isNaN($V{AMEND_MEASURE} / $V{AMEND_COUNT}) ? 0.0 : $V{AMEND_MEASURE} / $V{AMEND_COUNT}
-]]></textFieldExpression>
+							<textFieldExpression><![CDATA[Double.isNaN($V{AMEND_MEASURE} / $V{AMEND_COUNT}) ? 0.0 : $V{AMEND_MEASURE} / $V{AMEND_COUNT}]]></textFieldExpression>
 						</textField>
 					</cellContents>
 				</crosstabCell>
@@ -2442,7 +2434,7 @@ FROM DUAL]]>
 					</dataset>
 				</crosstabDataset>
 				<rowGroup name="UDFNAME" width="360">
-					<bucket class="java.lang.String">
+					<bucket order="Descending" class="java.lang.String">
 						<bucketExpression><![CDATA[$F{UDFNAME}]]></bucketExpression>
 					</bucket>
 					<crosstabRowHeader>
@@ -2450,6 +2442,20 @@ FROM DUAL]]>
 							<box>
 								<rightPen lineWidth="0.0"/>
 							</box>
+							<rectangle>
+								<reportElement x="0" y="0" width="110" height="20" uuid="534ddd0c-2c4b-4ff2-9356-148a4b03aaca">
+									<property name="local_mesure_unitheight" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.height" value="px"/>
+									<property name="local_mesure_unitwidth" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.width" value="px"/>
+									<property name="local_mesure_unitx" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.x" value="px"/>
+									<printWhenExpression><![CDATA[Boolean.valueOf( $V{ROW_COUNT}.intValue() % 2 == 0 )]]></printWhenExpression>
+								</reportElement>
+								<graphicElement>
+									<pen lineWidth="0.0" lineColor="#FFFFFF"/>
+								</graphicElement>
+							</rectangle>
 							<rectangle>
 								<reportElement x="110" y="0" width="190" height="20" uuid="e37f7570-01de-4cbb-b5bc-25d864c76ad5">
 									<property name="local_mesure_unitheight" value="pixel"/>
@@ -2480,26 +2486,12 @@ FROM DUAL]]>
 									<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 								</graphicElement>
 							</rectangle>
-							<rectangle>
-								<reportElement x="0" y="0" width="110" height="20" uuid="534ddd0c-2c4b-4ff2-9356-148a4b03aaca">
-									<property name="local_mesure_unitheight" value="pixel"/>
-									<property name="com.jaspersoft.studio.unit.height" value="px"/>
-									<property name="local_mesure_unitwidth" value="pixel"/>
-									<property name="com.jaspersoft.studio.unit.width" value="px"/>
-									<property name="local_mesure_unitx" value="pixel"/>
-									<property name="com.jaspersoft.studio.unit.x" value="px"/>
-									<printWhenExpression><![CDATA[Boolean.valueOf( $V{ROW_COUNT}.intValue() % 2 == 0 )]]></printWhenExpression>
-								</reportElement>
-								<graphicElement>
-									<pen lineWidth="0.0" lineColor="#FFFFFF"/>
-								</graphicElement>
-							</rectangle>
 							<textField>
 								<reportElement x="110" y="0" width="190" height="20" isRemoveLineWhenBlank="true" uuid="1971705e-1c87-497e-a5bb-56457f0b44df">
 									<property name="local_mesure_unitheight" value="pixel"/>
 									<property name="local_mesure_unitwidth" value="pixel"/>
 									<property name="com.jaspersoft.studio.unit.width" value="px"/>
-									<printWhenExpression><![CDATA[$V{UDFNAME} != null]]></printWhenExpression>
+									<printWhenExpression><![CDATA[$V{ROW_COUNT} <= 2]]></printWhenExpression>
 								</reportElement>
 								<box>
 									<leftPen lineWidth="0.5"/>
@@ -2509,7 +2501,7 @@ FROM DUAL]]>
 									<font size="7"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$V{UDFNAME}.equals("VCS_Coverage") ? " VCS coverage (FAIL)" : "% of positive mutation"]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$V{ROW_COUNT} == 1 ? " VCS coverage (PASS)" : "% of positive mutation"]]></textFieldExpression>
 							</textField>
 							<textField>
 								<reportElement x="300" y="0" width="60" height="20" isRemoveLineWhenBlank="true" uuid="2498a3e3-e40b-4ef2-889b-0c5e13e8c804">
@@ -2517,7 +2509,7 @@ FROM DUAL]]>
 									<property name="com.jaspersoft.studio.unit.width" value="px"/>
 									<property name="local_mesure_unitheight" value="pixel"/>
 									<property name="com.jaspersoft.studio.unit.height" value="px"/>
-									<printWhenExpression><![CDATA[$V{UDFNAME} != null]]></printWhenExpression>
+									<printWhenExpression><![CDATA[$V{ROW_COUNT} <= 2]]></printWhenExpression>
 								</reportElement>
 								<box>
 									<leftPen lineWidth="0.5"/>
@@ -2535,7 +2527,7 @@ FROM DUAL]]>
 									<property name="com.jaspersoft.studio.unit.width" value="px"/>
 									<property name="local_mesure_unitheight" value="pixel"/>
 									<property name="com.jaspersoft.studio.unit.height" value="px"/>
-									<printWhenExpression><![CDATA[$V{UDFNAME} != null]]></printWhenExpression>
+									<printWhenExpression><![CDATA[$V{ROW_COUNT} <= 2]]></printWhenExpression>
 								</reportElement>
 								<box>
 									<leftPen lineWidth="0.5"/>
@@ -2545,7 +2537,7 @@ FROM DUAL]]>
 									<font size="7"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$V{UDFNAME}.equals("VCS_Coverage") ? "VCS Coverage Average" : "Positive Mutation Rate"]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$V{ROW_COUNT} == 1 ? "VCS Coverage Average" : "Positive Mutation Rate"]]></textFieldExpression>
 							</textField>
 						</cellContents>
 					</crosstabRowHeader>
@@ -2575,10 +2567,10 @@ FROM DUAL]]>
 					</crosstabTotalColumnHeader>
 				</columnGroup>
 				<measure name="UDFVAL_MEASURE" class="java.lang.Double" calculation="Sum">
-					<measureExpression><![CDATA[$F{UDFVAL}.equals("FAIL") && $F{YEAR}.equals($P{bclYear}) ? new Integer(1) : new Integer(0)]]></measureExpression>
+					<measureExpression><![CDATA[$F{UDFNAME}.equals("VCS_Coverage") ? ($F{UDFVAL}.equals("PASS") && $F{YEAR}.equals($P{bclYear}) ? new Integer(1) : new Integer(0) ) : ($F{UDFVAL}.equals("YES") && $F{YEAR}.equals($P{bclYear}) ? new Integer(1) : new Integer(0) )]]></measureExpression>
 				</measure>
 				<measure name="UDFVAL_COUNT" class="java.lang.Double" calculation="Sum">
-					<measureExpression><![CDATA[$F{YEAR}.equals($P{bclYear}) ? new Integer(1) : new Integer(0)]]></measureExpression>
+					<measureExpression><![CDATA[$F{YEAR}.equals($P{bclYear}) && $F{PROSTAT}.equals("COMPLETE") ? new Integer(1) : new Integer(0)]]></measureExpression>
 				</measure>
 				<crosstabCell width="36" height="20">
 					<cellContents backcolor="#F0F8FF" mode="Opaque" style="Crosstab 24_CD">
@@ -2593,7 +2585,7 @@ FROM DUAL]]>
 						<textField pattern="#,##0.0%;(#,##0.0">
 							<reportElement x="0" y="0" width="36" height="20" isRemoveLineWhenBlank="true" uuid="ced2c693-f64b-4f61-9fcc-a8f1c1d5fa49">
 								<property name="local_mesure_unitwidth" value="pixel"/>
-								<printWhenExpression><![CDATA[$V{UDFNAME} != null]]></printWhenExpression>
+								<printWhenExpression><![CDATA[$V{ROW_COUNT} <= 2]]></printWhenExpression>
 							</reportElement>
 							<box>
 								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
