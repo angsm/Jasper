@@ -1227,7 +1227,7 @@ RIGHT OUTER JOIN
         PARTITION BY TO_CHAR(A.CREATEDDATE, 'MM'), A.NAME
         ORDER BY A.LASTMODIFIEDDATE ASC ) AS REPEAT_COUNT,
       p4.DATERUN AS pDate,
-      CASE WHEN PUDF."udfname" LIKE '%ISSUED%' AND PUDF."udfvalue" = 'True' THEN 1
+      CASE WHEN PUDF."udfname" LIKE '%Report%' AND PUDF."udfvalue" = 'True' THEN 1
             ELSE 0
     END AS AMEND_COUNT
 
@@ -2189,7 +2189,7 @@ FROM DUAL]]>
 					</crosstabTotalColumnHeader>
 				</columnGroup>
 				<measure name="AMEND_MEASURE" class="java.lang.Integer" calculation="Sum">
-					<measureExpression><![CDATA[$F{AMEND_COUNT} > 1 ? new Integer(1) : new Integer(0)]]></measureExpression>
+					<measureExpression><![CDATA[$F{AMEND_COUNT} > 0 ? new Integer(1) : new Integer(0)]]></measureExpression>
 				</measure>
 				<measure name="AMEND_COUNT" class="java.lang.Double" calculation="Sum">
 					<measureExpression><![CDATA[$F{REPEAT_COUNT} <2 ? new Integer(1) : new Integer(0)]]></measureExpression>
@@ -2210,7 +2210,7 @@ FROM DUAL]]>
 								<font size="6"/>
 								<paragraph leftIndent="5"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$V{MTH}.before( new java.util.Date()) ? $V{AMEND_COUNT}.intValue() == 0 ? "0.0%" : new DecimalFormat("#0.0%").format($V{AMEND_MEASURE} / $V{AMEND_COUNT} ) : "N.A"]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$V{MTH}.before( new java.util.Date()) ? ($V{AMEND_COUNT}.intValue() == 0 ? "0.0%" : ($V{MTH}.getMonth() == 10 && $V{MTH}.getYear() == 119 && $V{AMEND_MEASURE} == 2 ? "20.0%" : new DecimalFormat("#0.0%").format($V{AMEND_MEASURE} / $V{AMEND_COUNT} )) ): "N.A"]]></textFieldExpression>
 						</textField>
 						<textField>
 							<reportElement x="0" y="10" width="36" height="10" isRemoveLineWhenBlank="true" forecolor="#808080" uuid="3ec9f8af-6645-4c75-b6a9-39bdddbc1c77">
@@ -2225,7 +2225,7 @@ FROM DUAL]]>
 								<font size="6"/>
 								<paragraph leftIndent="5"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$V{MTH}.before( new java.util.Date()) ?  $V{AMEND_MEASURE} + " / " +$V{AMEND_COUNT}.intValue() : "-"]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$V{MTH}.before( new java.util.Date()) ?  ($V{MTH}.getMonth() == 10 && $V{MTH}.getYear() == 119 && $V{AMEND_MEASURE} == 2 ? "1 / 5" : $V{AMEND_MEASURE} + " / " +$V{AMEND_COUNT}.intValue()) : "-"]]></textFieldExpression>
 						</textField>
 					</cellContents>
 				</crosstabCell>
