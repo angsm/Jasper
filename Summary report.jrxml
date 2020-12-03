@@ -1083,18 +1083,32 @@ SELECT * FROM(
 
 SELECT a.SID as SID, ROW_NUMBER() Over (Partition BY a.PID Order By a.SMPNAME DESC) AS RANK2,  a.SMPNAME, a.QCFLAG, 
 
-  case 
-  when a.STEPNAME LIKE '%Slides%' THEN  '#' || REGEXP_REPLACE(a.STEPNAME, '(^*)(\s[(].*[)].*$)', '\1') 
-  when a.STEPNAME LIKE '%Bio-Rad%' THEN  '9' || REGEXP_REPLACE(a.STEPNAME, '(^*)(\s[(].*[)].*$)', '\1') 
-           ELSE WID || REGEXP_REPLACE(a.STEPNAME, '(^*)(\s[(].*[)].*$)', '\1')
-  
+
+   case
+  when a.STEPNAME LIKE '%Slides%' THEN  '#' || REGEXP_REPLACE(a.STEPNAME, '(^*)(\s[(].*[)].*$)', '\1')
+  when a.STEPNAME LIKE '%Bio-Rad%' THEN  '9' || REGEXP_REPLACE(a.STEPNAME, '(^*)(\s[(].*[)].*$)', '\1')
+  when a.STEPNAME LIKE '%NanoDrop%' THEN '1' || REGEXP_REPLACE(a.STEPNAME, '(^*)(\s[(].*[)].*$)', '\1')
+  when a.STEPNAME LIKE '%Droplet%' THEN '9' || REGEXP_REPLACE(a.STEPNAME, '(^*)(\s[(].*[)].*$)', '\1')
+  when a.STEPNAME LIKE '%Combine Report%' THEN '8' || REGEXP_REPLACE(a.STEPNAME, '(^*)(\s[(].*[)].*$)', '\1')
+  when a.STEPNAME LIKE '%Return%' THEN '!' || REGEXP_REPLACE(a.STEPNAME, '(^*)(\s[(].*[)].*$)', '\1')
+
+    when (a.STEPNAME LIKE '%LabChip%' and a.STEPNAME LIKE '%Sample%') THEN '20' || REGEXP_REPLACE(a.STEPNAME, '(^*)(\s[(].*[)].*$)', '\1')
+    when (a.STEPNAME LIKE '%LabChip%' and a.STEPNAME LIKE '%library%') THEN '30' || REGEXP_REPLACE(a.STEPNAME, '(^*)(\s[(].*[)].*$)', '\1')
+    when a.STEPNAME LIKE '%Bcl%' THEN '80' || REGEXP_REPLACE(a.STEPNAME, '(^*)(\s[(].*[)].*$)', '\1')
+    when a.STEPNAME LIKE '%Bioinformatics%' THEN '90' || REGEXP_REPLACE(a.STEPNAME, '(^*)(\s[(].*[)].*$)', '\1')
+    when a.STEPNAME LIKE '%Qubit%' THEN '10' || REGEXP_REPLACE(a.STEPNAME, '(^*)(\s[(].*[)].*$)', '\1')
+    when a.STEPNAME LIKE '%Kapa%' THEN '40' || REGEXP_REPLACE(a.STEPNAME, '(^*)(\s[(].*[)].*$)', '\1')
+    ELSE WID || REGEXP_REPLACE(a.STEPNAME, '(^*)(\s[(].*[)].*$)', '\1')
+
   END AS STEPNAME,
 
 a.RANK, a.YEAR, a.PROTNAME, TO_DATE(MTH || $P{FAILURE_YEAR},  'MONYYYY') AS MON, b.PROJ FROM
 (
 SELECT artifactstate.QCFLAG AS QCFLAG,
     processtype.DISPLAYNAME AS STEPNAME,
-    ROW_NUMBER() Over (Partition BY TO_CHAR(process.DATERUN, 'WW'), processtype.DISPLAYNAME, a.NAME Order By artifactstate.LASTMODIFIEDDATE DESC) AS RANK,
+        ROW_NUMBER() Over (Partition BY a.Name, processtype.DISPLAYNAME Order By artifactstate.LASTMODIFIEDDATE DESC) AS RANK,
+    
+    /*ROW_NUMBER() Over (Partition BY TO_CHAR(process.DATERUN, 'WW'), processtype.DISPLAYNAME, a.NAME Order By artifactstate.LASTMODIFIEDDATE DESC) AS RANK,*/
     /*ROW_NUMBER() Over (Partition BY TO_CHAR(PROCESS.DATERUN, 'MON'), artifact.NAME Order By artifactstate.LASTMODIFIEDDATE DESC) AS RANK,*/
     
     TO_CHAR(process.DATERUN, 'YYYY') AS YEAR,
@@ -1132,12 +1146,12 @@ FROM
     ON WORKFLOWSECTION.WORKFLOWID = LABWORKFLOW.WORKFLOWID
 
 
-WHERE NOT REGEXP_LIKE(LOWER(processtype.DISPLAYNAME), 'pre-extraction|receiving|picogreen')
+WHERE NOT REGEXP_LIKE(LOWER(processtype.DISPLAYNAME), 'pre-extraction|receiving|picogreen|extraction')
       AND TO_CHAR(process.DATERUN, 'YYYY') = $P{FAILURE_YEAR}
       AND REGEXP_LIKE(LOWER(processtype.DISPLAYNAME), '(*)(v\d+\.)')
       AND ARTIFACTSTATE.QCFLAG != 0
     	AND (protocolstep.QCPROTOCOLSTEP = 1 OR protocolstep.QCPROTOCOLSTEP IS NULL)
-          AND NOT REGEXP_LIKE(LOWER(a.NAME), 'ntc|hct|nist|na|buffer|control|positive')
+          AND NOT REGEXP_LIKE(LOWER(a.NAME), 'ntc|hct|nist|na|buffer|control|positive|ptc')
 		AND LOWER(labprotocol.PROTOCOLNAME) LIKE $P{PROTNAME}	
 		AND LOWER(processtype.DISPLAYNAME) NOT LIKE 'slides%'
 		AND LOWER(labworkflow.WorkflowName) NOT LIKE '%only%'
@@ -1183,10 +1197,10 @@ RIGHT OUTER JOIN
            INNER JOIN project
              ON project.PROJECTID = "SAMPLE".PROJECTID
 
-         WHERE NOT REGEXP_LIKE(LOWER(labprotocol.PROTOCOLNAME), 'pre-extraction|receiving|picogreen')
+         WHERE NOT REGEXP_LIKE(LOWER(labprotocol.PROTOCOLNAME), 'pre-extraction|receiving|picogreen|extraction')
                AND TO_CHAR(process.DATERUN, 'YYYY') = $P{FAILURE_YEAR}
                AND LOWER(labprotocol.PROTOCOLNAME) LIKE  $P{PROTNAME}
-               AND NOT REGEXP_LIKE(LOWER("SAMPLE".NAME), 'ntc|hct|nist|na|control|positive')
+               AND NOT REGEXP_LIKE(LOWER("SAMPLE".NAME), 'ntc|hct|nist|na|control|positive|ptc')
         )
 )b
   WHERE RANK = 1 OR RANK IS NULL
@@ -1259,7 +1273,7 @@ RIGHT OUTER JOIN
             WHEN LOWER(P2.DISPLAYNAME) LIKE '%rspo%' THEN 'All Sample reports'
             ELSE '%-%'
           END
-          AND NOT REGEXP_LIKE(LOWER(A.NAME), 'positive|ntc|hct|nist|control|buffer')
+          AND NOT REGEXP_LIKE(LOWER(A.NAME), 'positive|ntc|hct|nist|control|buffer|ptc')
           AND NAME NOT LIKE 'LUH%'
       AND PUDF."udfname" LIKE '%Report%'
     )
@@ -1345,7 +1359,7 @@ FROM (
            AND processtype.DISPLAYNAME LIKE '%Bioinformatics%'
            AND LOWER(processtype.DISPLAYNAME) LIKE $P{PROTNAME}
            AND TO_CHAR(PROCESS.DATERUN, 'YYYY') = $P{DM_YEAR}
-           AND NOT REGEXP_LIKE(LOWER("SAMPLE".NAME), 'nist|hct|ntc|na')
+           AND NOT REGEXP_LIKE(LOWER("SAMPLE".NAME), 'nist|hct|ntc|na|ptc')
            
            AND "SAMPLE".NAME NOT LIKE '%LUH%'
     ) a
@@ -1478,7 +1492,7 @@ FROM (
           AND REGEXP_LIKE(LOWER(pt.DISPLAYNAME), 'receiving|slides selection')
           AND TO_CHAR(p.DATERUN, 'YYYY') = $P{REJECT_YEAR}
           AND LOWER(lp.PROTOCOLNAME) LIKE $P{PROTNAME}
-          AND NOT REGEXP_LIKE(LOWER(s.NAME), 'ntc|hct|nist')
+          AND NOT REGEXP_LIKE(LOWER(s.NAME), 'ntc|hct|nist|ptc')
                     
 
     ORDER BY st.LASTMODIFIEDDATE DESC
@@ -1528,7 +1542,7 @@ FROM (
          WHERE NOT REGEXP_LIKE(LOWER(labprotocol.PROTOCOLNAME), 'dna extraction|pre-extraction|receiving|picogreen')
                AND TO_CHAR(process.DATERUN, 'YYYY') = $P{REJECT_YEAR}
                AND LOWER(labprotocol.PROTOCOLNAME) LIKE $P{PROTNAME}
-               AND NOT REGEXP_LIKE(LOWER("SAMPLE".NAME), 'ntc|hct|nist')
+               AND NOT REGEXP_LIKE(LOWER("SAMPLE".NAME), 'ntc|hct|nist|ptc')
                             
         )
     ) b]]>
@@ -1546,7 +1560,7 @@ FROM (
 		<field name="PROJ" class="java.lang.String"/>
 	</subDataset>
 	<subDataset name="TurnAroundTime" uuid="99995240-a243-4cc2-8701-467a8fdfa650">
-		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="limsDB - RW"/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="LIMS_UAT"/>
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="336"/>
 		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="656"/>
@@ -1562,7 +1576,7 @@ SELECT a.PROTNAME                                                               
              WHEN to_char(a.DR, 'YYYY') = to_char(a.LM, 'YYYY')
                THEN to_char(cast(TO_DATE(TO_CHAR(a.LM, 'YYYY-MM-DD'), 'YYYY-MM-DD') AS DATE) - cast(a.DR AS DATE), '9999.9999') -
                     (2 * (to_char(a.LM, 'WW') - to_char(a.DR, 'WW')))
-                    
+
 			/*receive and last mod date is NOT same*/
             /* this year's spent days*/
              ELSE to_char(cast(TO_DATE(TO_CHAR(a.LM, 'YYYY-MM-DD'), 'YYYY-MM-DD') AS DATE) - cast(TRUNC(SYSDATE, 'YEAR') AS DATE), '9999.9999') -
@@ -1590,7 +1604,10 @@ SELECT a.PROTNAME                                                               
                                                 WHERE (TO_DATE(dt, 'yyyy-mm-dd') BETWEEN a.DR
                                                   AND a.LM)
                                                   AND TO_DATE(dt, 'YYYY-MM-DD') in
-                                                      (SELECT HOLIDAY_DATE FROM POLARIS_ADMIN.HOLIDAY_SG))) AS daysTaken,
+                                                      (SELECT HOLIDAY_DATE FROM POLARIS_ADMIN.HOLIDAY_SG))
+
+
+         ) - NVL((SELECT to_number("udfvalue") FROM SAMPLE_UDF_VIEW sudf WHERE sudf.SAMPLEID = SID AND "udfname" LIKE '%on-hold%'), 0) AS daysTaken,
        TO_DATE(M.MTH, 'YYYY-MON')  AS daterun,
   NVL(TO_CHAR(DATERUN, 'YYYY'), $P{TAT_YEAR}) AS YEAR
 FROM
@@ -1601,6 +1618,7 @@ FROM
       smp.DATERECEIVED       AS DR,
       pro.DATERUN            AS DATERUN,
       pt.DISPLAYNAME         AS PROTNAME,
+      smp.SAMPLEID AS SID,
       row_number() over (partition by art.name order by pro.LASTMODIFIEDDATE desc) as rn
       
     FROM CBE_LastWorkflowStep_hist lws,
@@ -1626,7 +1644,7 @@ FROM
           AND protstep.STEPID = pro.PROTOCOLSTEPID
           AND labprot.PROTOCOLID = protstep.PROTOCOLID
           AND pt.DISPLAYNAME LIKE '%Documents Verification%'
-          AND NOT REGEXP_LIKE(LOWER(smp.NAME), 'ntc|hct|nist|na')
+          AND NOT REGEXP_LIKE(LOWER(smp.NAME), 'ntc|hct|nist|na|ptc')
 
           AND
           (
@@ -1635,14 +1653,18 @@ FROM
             OR ($P{PROTNAME} = '%xt2%' AND lws."WorkflowName" LIKE '%SureSelect XT2%')
             OR ($P{PROTNAME} = '%entrogen%' AND lws."WorkflowName" LIKE '%EntroGen KRAS/BRAF Mutation Anaysis%')
             OR ($P{PROTNAME} = '%low input%' AND lws."WorkflowName" LIKE '%Low input SureSelect XT2%')
-            OR ($P{PROTNAME} = '%cet%' AND lws."WorkflowName" LIKE '%CET Bioinformatics%')
-            OR ($P{PROTNAME} = '%rspo%' AND lws."WorkflowName" LIKE '%RSPO qPCR Run%')
+
+            OR ($P{PROTNAME} = '%rspo%' AND ( lws."WorkflowName" LIKE '%RSPO qPCR Run%' OR  lws."WorkflowName" LIKE '%RSPO Document Verification%') )
             OR ($P{PROTNAME} = '%nanostring%' AND lws."WorkflowName" LIKE '%Nanostring ProSigna Run%')
             OR ($P{PROTNAME} = '%scp%' AND lws."WorkflowName" LIKE '%SCP Bioinformatics%')
+            OR ($P{PROTNAME} = '%ddpcr%' AND lws."WorkflowName" LIKE '%ddPCR Documents Verification%')
+            OR ($P{PROTNAME} = '%cet2%' AND (lws."WorkflowName" LIKE '%CET Document Verification%' OR lws."WorkflowName" LIKE '%CET2 Document Verification%' ) )
+            OR ($P{PROTNAME} = '%cet%' AND lws."WorkflowName" LIKE '%CET Bioinformatics%')
+            
           )
 
           AND TO_CHAR(pro.daterun, 'YYYY') = $P{TAT_YEAR}
-          GROUP BY art.name, pro.LASTMODIFIEDDATE, smp.DATERECEIVED, pro.DATERUN, pt.DISPLAYNAME
+          GROUP BY art.name, pro.LASTMODIFIEDDATE, smp.DATERECEIVED, pro.DATERUN, pt.DISPLAYNAME, smp.sampleid
       
   ) a
 
@@ -1792,6 +1814,84 @@ FROM
 		<field name="MON" class="java.sql.Timestamp"/>
 		<field name="PROJ" class="java.lang.String"/>
 	</subDataset>
+	<subDataset name="bioit_workflow1_stats" uuid="d5798ea8-c716-4447-9b13-81f7d4a6aec4">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Clarity LIMS PrdDB"/>
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="469"/>
+		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="522"/>
+		<parameter name="DM_YEAR" class="java.lang.String">
+			<parameterDescription><![CDATA[]]></parameterDescription>
+		</parameter>
+		<parameter name="PROTNAME" class="java.lang.String">
+			<parameterDescription><![CDATA[]]></parameterDescription>
+		</parameter>
+		<queryString language="SQL">
+			<![CDATA[SELECT
+  UDF,
+  NVL(UDFVal, 'NA')             AS UDFVAL,
+  TO_CHAR(daterun, 'YYYY')      AS YEAR,
+  DISPLAYNAME,
+  SMPNAME,
+  RANK,
+  TO_DATE(M.MTH
+          || $P{DM_YEAR}, 'MONYYYY') AS MON
+FROM (
+
+  SELECT *
+  FROM
+    (SELECT
+       ARTIFACT_UDF_VIEW."udfname"      AS UDF,
+       ARTIFACT_UDF_VIEW."udfvalue"     AS UDFVal,
+       PROCESS.DATERUN                  AS daterun,
+       processtype.DISPLAYNAME          AS DISPLAYNAME,
+       "SAMPLE".NAME                    AS SMPNAME,
+       ROW_NUMBER()
+       OVER (PARTITION BY "SAMPLE".NAME, TO_CHAR(PROCESS.DATERUN,'MON'),  ARTIFACT_UDF_VIEW."udfname"
+         ORDER BY PROCESS.DATERUN DESC) AS RANK
+
+     FROM PROCESS
+       INNER JOIN processtype
+         ON processtype.TYPEID = PROCESS.TYPEID
+       INNER JOIN PROCESSIOTRACKER
+         ON PROCESSIOTRACKER.PROCESSID = PROCESS.PROCESSID
+       INNER JOIN OUTPUTMAPPING
+         ON PROCESSIOTRACKER.TRACKERID = OUTPUTMAPPING.TRACKERID
+       INNER JOIN ARTIFACT_UDF_VIEW
+         ON ARTIFACT_UDF_VIEW.ARTIFACTID = OUTPUTMAPPING.OUTPUTARTIFACTID
+       INNER JOIN ARTIFACT_SAMPLE_MAP
+         ON ARTIFACT_SAMPLE_MAP.ARTIFACTID = ARTIFACT_UDF_VIEW.ARTIFACTID
+       INNER JOIN "SAMPLE"
+         ON "SAMPLE".PROCESSID = ARTIFACT_SAMPLE_MAP.PROCESSID
+
+     WHERE (ARTIFACT_UDF_VIEW."udfname" = 'Depth_Median'
+            OR ARTIFACT_UDF_VIEW."udfname" = 'VCS_Coverage'
+            OR ARTIFACT_UDF_VIEW."udfname" = 'PCT_TARGET_BASES_30X')
+           AND processtype.DISPLAYNAME LIKE '%Bioinformatics%'
+           AND LOWER(processtype.DISPLAYNAME) LIKE $P{PROTNAME}
+           AND TO_CHAR(PROCESS.DATERUN, 'YYYY') = $P{DM_YEAR}
+           AND NOT REGEXP_LIKE(LOWER("SAMPLE".NAME), 'nist|hct|ntc|na|ptc')
+
+           AND "SAMPLE".NAME NOT LIKE '%LUH%'
+    ) a
+
+  WHERE RANK = 2 AND RANK IS NOT NULL
+
+  )
+  RIGHT OUTER JOIN
+  (SELECT TO_CHAR(add_months(SYSDATE, (LEVEL - TO_CHAR(SYSDATE, 'MM'))), 'MON') AS MTH
+   FROM dual
+   CONNECT BY LEVEL <= 12
+  ) M
+    ON TO_CHAR(daterun, 'MON') = M.MTH]]>
+		</queryString>
+		<field name="UDF" class="java.lang.String"/>
+		<field name="UDFVAL" class="java.lang.String"/>
+		<field name="MON" class="java.sql.Timestamp"/>
+		<field name="YEAR" class="java.lang.String"/>
+		<field name="DISPLAYNAME" class="java.lang.String"/>
+		<field name="SMPNAME" class="java.lang.String"/>
+		<field name="RANK" class="java.lang.Integer"/>
+	</subDataset>
 	<parameter name="param_year" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 		<defaultValueExpression><![CDATA[YEAR(new Date())]]></defaultValueExpression>
@@ -1840,10 +1940,12 @@ FROM DUAL]]>
 	($P{param_selectedProt}.equals("%low input%") ? "Low Input SureSelect XT2" :
 		($P{param_selectedProt}.equals("%entrogen%") ? "EntroGen" : 
 			($P{param_selectedProt}.equals("%xplora%") ? "Xplora" : 
-				($P{param_selectedProt}.equals("%cet%") ? "CET" : 
+				($P{param_selectedProt}.equals("%cet%") || $P{param_selectedProt}.equals("%cet2%") ? "Clinical Exome Test" : 
 					($P{param_selectedProt}.equals("%rspo%") ? "RSPO" : 
 						($P{param_selectedProt}.equals("%nanostring%") ? "Nanostring Prosigna" : 
-							($P{param_selectedProt}.equals("%scp%") ? "Somatic Cancer Panel" : "")
+							($P{param_selectedProt}.equals("%scp%") ? "Somatic Cancer Panel" : 
+							   ($P{param_selectedProt}.equals("%ddpcr%") ? "ddPCR" : "")
+							   )
 			       )
 			   )
 			)
@@ -1901,7 +2003,7 @@ FROM DUAL]]>
 									<font size="7"/>
 									<paragraph leftIndent="0" rightIndent="5" spacingBefore="0" spacingAfter="0"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$V{STEP} != null ? ($V{STEP}.toLowerCase().contains("library") ? $V{STEP}.substring( 1 ) + "\n( per library )" : $V{STEP}.substring( 1 )) : "No matching step(s) found with criteria"]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$V{STEP} != null ? ($V{STEP}.toLowerCase().contains("library") ? $V{STEP}.substring( 2 ) + "\n( per library )" : $V{STEP}.substring( 2 )) : "No matching step(s) found with criteria2"]]></textFieldExpression>
 							</textField>
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement mode="Opaque" x="100" y="0" width="20" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true" backcolor="#F0F8FF" uuid="1b2ae7f4-9059-460d-9e8f-291d44e4104d">
@@ -1919,7 +2021,10 @@ FROM DUAL]]>
 									<font size="7"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$V{STEP}.contains( "Real" ) ? "1)" : ( $V{WorkflowName}.contains( "CET" ) ? $V{ROW_COUNT} + 2 + ")" : $V{WorkflowName}.contains( "SCP" ) ? $V{ROW_COUNT} + ")":$V{ROW_COUNT} + 1 + ")")]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$V{STEP}.contains( "Real" )  ? "1)" : 
+( $V{WorkflowName}.contains( "SCP" ) || $V{WorkflowName}.contains( "ddPCR" )  || $V{WorkflowName}.contains( "CET2" )  ? $V{ROW_COUNT} + ")":
+ $V{WorkflowName}.contains( "CET" ) ? $V{ROW_COUNT} + 2 + ")" :
+ $V{ROW_COUNT} + 1 + ")" )]]></textFieldExpression>
 							</textField>
 							<textField isStretchWithOverflow="true">
 								<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="310" y="0" width="50" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true" backcolor="#F0F8FF" uuid="7a207093-ca50-4141-89c5-a522649f4b4a">
@@ -2106,7 +2211,7 @@ FROM DUAL]]>
 			<crosstab>
 				<reportElement positionType="Float" mode="Transparent" x="5" y="160" width="792" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF" uuid="dedc8921-461a-4b79-8c22-208d3925f7c1">
 					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="Report_Amend"/>
-					<printWhenExpression><![CDATA[! $P{param_selectedProt}.contains( "entrogen" )]]></printWhenExpression>
+					<printWhenExpression><![CDATA[! $P{param_selectedProt}.contains( "entrogen" ) && ! $P{param_selectedProt}.contains( "rspo" )]]></printWhenExpression>
 				</reportElement>
 				<crosstabDataset>
 					<dataset>
@@ -3063,7 +3168,7 @@ FROM DUAL]]>
 					</crosstabTotalColumnHeader>
 				</columnGroup>
 				<measure name="ACTION_MEASURE" class="java.lang.Double" calculation="Sum">
-					<measureExpression><![CDATA[!$F{DISPLAYNAME}.contains( "Auto verify" ) && !$F{DISPLAYNAME}.contains( "Split" ) && !$F{DISPLAYNAME}.contains( "Collection" ) && ($F{ACTIONTYPE} == -4 || $F{ACTIONTYPE} == -3) ? new Integer(1) : new Integer(0)]]></measureExpression>
+					<measureExpression><![CDATA[!$F{DISPLAYNAME}.contains( "Auto verify" ) && !$F{DISPLAYNAME}.contains( "Split" ) && !$F{DISPLAYNAME}.contains( "Collection" ) && ($F{ACTIONTYPE} == -4) ? new Integer(1) : new Integer(0)]]></measureExpression>
 				</measure>
 				<measure name="REJECTION_COUNT" class="java.lang.Double" calculation="Count">
 					<measureExpression><![CDATA[$F{SMPID}]]></measureExpression>
@@ -3248,7 +3353,7 @@ FROM DUAL]]>
 			<crosstab>
 				<reportElement key="" positionType="Float" x="5" y="180" width="792" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true" uuid="115b5395-8eb3-466c-8833-ee2496cff6c5">
 					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="Depth_median_QC"/>
-					<printWhenExpression><![CDATA[$P{param_selectedProt}.toLowerCase().contains( "xplora" ) || $P{param_selectedProt}.toLowerCase().contains( "cet" ) || $P{param_selectedProt}.toLowerCase().contains( "scp" )]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{param_selectedProt}.toLowerCase().contains( "xplora" ) || ($P{param_selectedProt}.toLowerCase().contains( "cet" ) &&  !$P{param_selectedProt}.toLowerCase().contains( "cet2" )) || $P{param_selectedProt}.toLowerCase().contains( "scp" )]]></printWhenExpression>
 				</reportElement>
 				<box>
 					<bottomPen lineWidth="0.5"/>
@@ -3910,7 +4015,7 @@ FROM DUAL]]>
 			<crosstab>
 				<reportElement key="" positionType="Float" isPrintRepeatedValues="false" x="5" y="100" width="792" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true" uuid="78eab7ee-5af7-403c-940a-a2b43308a9b9">
 					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="Sample_Failure"/>
-					<printWhenExpression><![CDATA[! $P{param_selectedProt}.contains( "entrogen" ) && ! $P{param_selectedProt}.contains( "nanostring" ) && ! $P{param_selectedProt}.contains( "rspo" ) && ! $P{param_selectedProt}.contains( "scp" )]]></printWhenExpression>
+					<printWhenExpression><![CDATA[! $P{param_selectedProt}.contains( "entrogen" ) && ! $P{param_selectedProt}.contains( "nanostring" ) && ! $P{param_selectedProt}.contains( "rspo" ) && ! $P{param_selectedProt}.contains( "scp" ) && ! $P{param_selectedProt}.contains( "ddpcr" ) && ! $P{param_selectedProt}.contains( "cet2" )]]></printWhenExpression>
 				</reportElement>
 				<box>
 					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
@@ -3952,7 +4057,7 @@ FROM DUAL]]>
 									<font size="7"/>
 									<paragraph leftIndent="0" rightIndent="5" spacingBefore="0" spacingAfter="0"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$V{STEP} != null ? $V{STEP} : "No matching step(s) found with criteria"]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$V{STEP} != null ? $V{STEP} : "No matching step(s) found with criteria1"]]></textFieldExpression>
 							</textField>
 							<textField isStretchWithOverflow="true">
 								<reportElement mode="Opaque" x="100" y="0" width="20" height="20" isRemoveLineWhenBlank="true" backcolor="#F0F8FF" uuid="66454b93-9707-4c3b-ae32-58d61820a6cc">
@@ -4198,7 +4303,7 @@ FROM DUAL]]>
 									<font size="7"/>
 									<paragraph leftIndent="0" rightIndent="5" spacingBefore="0" spacingAfter="0"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$V{STEP} != null ? ($V{STEP}.toLowerCase().contains("library") ? $V{STEP}.substring( 1 ) + "\n( per library )" : $V{STEP}.substring( 1 )) : "No matching step(s) found with criteria"]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$V{STEP} != null ? ($V{STEP}.toLowerCase().contains("library") ? $V{STEP}.substring( 1 ) + "\n( per library )" : $V{STEP}.substring( 1 )) : "No matching step(s) found with criteria3"]]></textFieldExpression>
 							</textField>
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement positionType="Float" mode="Opaque" x="100" y="0" width="20" height="20" isRemoveLineWhenBlank="true" backcolor="#F0F8FF" uuid="6f7561fc-fade-403a-a778-e9d7053c854c">
@@ -4477,7 +4582,10 @@ FROM DUAL]]>
 								<textFieldExpression><![CDATA[($V{INPUT_PROT}.contains("xplora") ? 28 : 
 	($V{INPUT_PROT}.contains("cet") ? 15 :  
 		($V{INPUT_PROT}.contains("rspo") || $V{INPUT_PROT}.contains("nanostring") || $V{INPUT_PROT}.contains("scp") ? 10 : 
+			($V{INPUT_PROT}.contains("ddpcr") ? 4 : 
 			8
+			
+			)
 		)
 	)
 ) + " working days"]]></textFieldExpression>
@@ -4526,7 +4634,13 @@ FROM DUAL]]>
 					</crosstabTotalColumnHeader>
 				</columnGroup>
 				<measure name="SMPNAME_MEASURE" class="java.lang.Double" calculation="Sum">
-					<measureExpression><![CDATA[Double.parseDouble( $F{DAYSTAKEN} ) > ($F{SMPNAME}.contains("-XP-") ? 28 : ($F{SMPNAME}.contains("-CE-") ? 15 : ($F{SMPNAME}.contains("-PS-") || $F{SMPNAME}.contains("-RS-") || $F{SMPNAME}.contains("-SO-")  ? 10 : 8)))  && $F{YEAR}.equals($P{TAT_YEAR}) ? new Integer(1) : new Integer(0)]]></measureExpression>
+					<measureExpression><![CDATA[Double.parseDouble( $F{DAYSTAKEN} ) > ($F{SMPNAME}.contains("-XP-") ? 28 : 
+	($F{SMPNAME}.contains("-CE-") ? ($F{PROTNAME}.contains("clinical") ? 30: 15) : 
+		($F{SMPNAME}.contains("-PS-") || $F{SMPNAME}.contains("-RS-") || $F{SMPNAME}.contains("-SO-")  ? 10 : 
+			8
+		)
+	)
+)  && $F{YEAR}.equals($P{TAT_YEAR}) ? new Integer(1) : new Integer(0)]]></measureExpression>
 				</measure>
 				<measure name="SMP_COUNT" class="java.lang.Double" calculation="DistinctCount">
 					<measureExpression><![CDATA[$F{SMPNAME}]]></measureExpression>
@@ -4624,6 +4738,222 @@ FROM DUAL]]>
 					<cellContents mode="Opaque" style="Crosstab 10_CT">
 						<textField>
 							<reportElement x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="11e0372a-fd1d-4b36-a780-65510920c9d7"/>
+							<textFieldExpression><![CDATA[$V{SMPNAME_MEASURE}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+			</crosstab>
+			<crosstab>
+				<reportElement key="" positionType="Float" x="5" y="280" width="792" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true" uuid="9ae4ed68-fe78-451e-abf7-62335a4f7777">
+					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="Depth_median_QC"/>
+					<printWhenExpression><![CDATA[$P{param_selectedProt}.toLowerCase().contains( "cet2" )]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<crosstabDataset>
+					<dataset>
+						<datasetRun subDataset="bioit_workflow1_stats" uuid="d1fd4d43-195a-403c-8819-0df3fe8a6ad2">
+							<datasetParameter name="DM_YEAR">
+								<datasetParameterExpression><![CDATA[$P{param_year}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="PROTNAME">
+								<datasetParameterExpression><![CDATA[$P{param_selectedProt}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+					</dataset>
+				</crosstabDataset>
+				<rowGroup name="PROTNAME" width="360">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{YEAR}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents mode="Opaque" style="Crosstab 10_CH">
+							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+							<textField>
+								<reportElement positionType="Float" mode="Opaque" x="100" y="0" width="210" height="20" isRemoveLineWhenBlank="true" backcolor="#F0F8FF" uuid="3636587a-7576-4927-ab11-cee3b2e1d6a2">
+									<property name="local_mesure_unitwidth" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.width" value="px"/>
+									<printWhenExpression><![CDATA[$V{ROW_COUNT} > 1 ? ($V{PROTNAME} != null ? true : false) : true]]></printWhenExpression>
+								</reportElement>
+								<box>
+									<topPen lineWidth="0.5"/>
+									<leftPen lineWidth="0.5"/>
+									<bottomPen lineWidth="0.5"/>
+									<rightPen lineWidth="0.5"/>
+								</box>
+								<textElement verticalAlignment="Middle">
+									<font size="7"/>
+									<paragraph leftIndent="5"/>
+								</textElement>
+								<textFieldExpression><![CDATA["<95% of target bases covered at >=30"]]></textFieldExpression>
+							</textField>
+							<textField>
+								<reportElement mode="Opaque" x="310" y="0" width="50" height="20" backcolor="#F0F8FF" uuid="ac3c0fce-a336-4cc4-bf22-1589f9d21fd6">
+									<property name="local_mesure_unitwidth" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.width" value="px"/>
+									<property name="local_mesure_unitheight" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.height" value="px"/>
+									<printWhenExpression><![CDATA[$V{ROW_COUNT} > 1 ? ($V{PROTNAME} != null ? true : false) : true]]></printWhenExpression>
+								</reportElement>
+								<box>
+									<topPen lineWidth="0.5"/>
+									<leftPen lineWidth="0.5"/>
+									<bottomPen lineWidth="0.5"/>
+									<rightPen lineWidth="0.5"/>
+								</box>
+								<textElement verticalAlignment="Middle">
+									<font size="7"/>
+									<paragraph leftIndent="5"/>
+								</textElement>
+								<textFieldExpression><![CDATA["NA"]]></textFieldExpression>
+							</textField>
+							<textField>
+								<reportElement mode="Opaque" x="0" y="0" width="100" height="20" backcolor="#F0F8FF" uuid="8831ccba-8260-42a9-ba98-d63e5f2e0b89">
+									<printWhenExpression><![CDATA[$V{ROW_COUNT} > 1 ? ($V{PROTNAME} != null ? true : false) : true]]></printWhenExpression>
+								</reportElement>
+								<box>
+									<topPen lineWidth="0.5"/>
+									<leftPen lineWidth="0.5"/>
+									<bottomPen lineWidth="0.5"/>
+									<rightPen lineWidth="0.5"/>
+								</box>
+								<textElement verticalAlignment="Middle">
+									<font size="7"/>
+									<paragraph leftIndent="5"/>
+								</textElement>
+								<textFieldExpression><![CDATA["Coverage"]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents mode="Opaque" style="Crosstab 10_CT">
+							<staticText>
+								<reportElement x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="e9c407e0-f332-45be-96a3-977b9493ae61"/>
+								<text><![CDATA[Total PROTNAME]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<columnGroup name="MTH" height="0">
+					<bucket class="java.sql.Timestamp">
+						<bucketExpression><![CDATA[$F{MON}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents mode="Opaque" style="Crosstab 10_CH"/>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents mode="Opaque" style="Crosstab 10_CT">
+							<staticText>
+								<reportElement x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="6295bc6f-5ce0-4221-8d49-9abec4b5f383"/>
+								<text><![CDATA[Total MTH]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<measure name="SMPNAME_MEASURE" class="java.lang.Double" calculation="Sum">
+					<measureExpression><![CDATA[$F{UDFVAL}.contains( "NA" ) ? 
+	new Integer(0) : ($F{YEAR}.equals($P{DM_YEAR}) && $F{UDF}.contains("PCT_TARGET_BASES_30X") && Double.parseDouble($F{UDFVAL}) < 95.00 ? 
+		new Integer(1) : new Integer(0)
+	)]]></measureExpression>
+				</measure>
+				<measure name="SMP_COUNT" class="java.lang.Double" calculation="Sum">
+					<measureExpression><![CDATA[$F{UDF}.contains( "PCT_TARGET_BASES_30X" ) ? new Integer(1) : new Integer(0)]]></measureExpression>
+				</measure>
+				<measure name="INPUT_PROT" class="java.lang.String">
+					<measureExpression><![CDATA[$P{PROTNAME}]]></measureExpression>
+				</measure>
+				<crosstabCell width="36" height="20">
+					<cellContents mode="Opaque" style="Crosstab 10_CD">
+						<textField pattern="">
+							<reportElement mode="Opaque" x="0" y="0" width="36" height="10" isRemoveLineWhenBlank="true" backcolor="#F0F8FF" uuid="add192d8-27ab-4ffe-aba0-f8357cdc4bd0">
+								<property name="local_mesure_unitwidth" value="pixel"/>
+								<property name="com.jaspersoft.studio.unit.width" value="px"/>
+								<printWhenExpression><![CDATA[$V{ROW_COUNT} > 1 ? ($V{PROTNAME} != null ? true : false) : true]]></printWhenExpression>
+							</reportElement>
+							<box>
+								<topPen lineWidth="0.5"/>
+								<leftPen lineWidth="0.5"/>
+								<bottomPen lineWidth="0.0"/>
+								<rightPen lineWidth="0.5"/>
+							</box>
+							<textElement verticalAlignment="Middle">
+								<font size="6"/>
+								<paragraph leftIndent="5"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{SMP_COUNT}.intValue() == 0 ? ($V{MTH}.before( new java.util.Date()) ? "0.0%" : "N.A") : new DecimalFormat("#0.0%").format($V{SMPNAME_MEASURE} / ($V{SMP_COUNT} == 0 ? 1 : $V{SMP_COUNT}))]]></textFieldExpression>
+							<hyperlinkParameter name="_report">
+								<hyperlinkParameterExpression><![CDATA["/reports/LIMS_sampleFailure_report/SampleTurnAroundTime"]]></hyperlinkParameterExpression>
+							</hyperlinkParameter>
+							<hyperlinkParameter name="Date_From">
+								<hyperlinkParameterExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").format($V{MTH})]]></hyperlinkParameterExpression>
+							</hyperlinkParameter>
+							<hyperlinkParameter name="Date_To">
+								<hyperlinkParameterExpression><![CDATA[new SimpleDateFormat("yyyy-MM").format($V{MTH}) + "-" + (
+	IF((new SimpleDateFormat("M").format($V{MTH}).equals("1")),31,
+		IF((new SimpleDateFormat("M").format($V{MTH}).equals("2")),
+				(IF($V{MTH}.getYear()%4 == 0,29,28)),
+				
+			IF((new SimpleDateFormat("M").format($V{MTH}).equals("3")),31,
+				IF((new SimpleDateFormat("M").format($V{MTH}).equals("4")),30,
+					IF((new SimpleDateFormat("M").format($V{MTH}).equals("5")),31,
+						IF((new SimpleDateFormat("M").format($V{MTH}).equals("6")),30,
+							IF((new SimpleDateFormat("M").format($V{MTH}).equals("7")),31,
+								IF((new SimpleDateFormat("M").format($V{MTH}).equals("8")),31,
+									IF((new SimpleDateFormat("M").format($V{MTH}).equals("9")),30,
+										IF((new SimpleDateFormat("M").format($V{MTH}).equals("10")),31,
+											IF((new SimpleDateFormat("M").format($V{MTH}).equals("11")),30,31)
+										))
+								)
+							)
+						)
+					)
+				)
+			)	
+		
+		)
+	)
+		)]]></hyperlinkParameterExpression>
+							</hyperlinkParameter>
+						</textField>
+						<textField>
+							<reportElement key="" mode="Opaque" x="0" y="10" width="36" height="10" isRemoveLineWhenBlank="true" forecolor="#808080" backcolor="#F0F8FF" uuid="20bc2eca-d20c-4619-b6e4-7fb9a1e71ada">
+								<printWhenExpression><![CDATA[$V{ROW_COUNT} > 1 ? ($V{PROTNAME} != null ? true : false) : true]]></printWhenExpression>
+							</reportElement>
+							<box>
+								<leftPen lineWidth="0.5" lineColor="#000000"/>
+								<bottomPen lineWidth="0.5" lineColor="#000000"/>
+								<rightPen lineWidth="0.5" lineColor="#000000"/>
+							</box>
+							<textElement>
+								<font size="6"/>
+								<paragraph leftIndent="5"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{MTH}.before( new java.util.Date()) ? ($V{SMPNAME_MEASURE}.intValue() + " / " + $V{SMP_COUNT}.intValue()) : "-"]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="60" height="20" columnTotalGroup="MTH">
+					<cellContents mode="Opaque" style="Crosstab 10_CT">
+						<textField>
+							<reportElement x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="5aaa3ade-a9d5-472d-ad5e-1fa549defc9a"/>
+							<textFieldExpression><![CDATA[$V{SMPNAME_MEASURE}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="60" height="20" rowTotalGroup="PROTNAME">
+					<cellContents mode="Opaque" style="Crosstab 10_CT">
+						<textField>
+							<reportElement x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="02bdb0d4-1f71-447a-a407-eb38e58402ef"/>
+							<textFieldExpression><![CDATA[$V{SMPNAME_MEASURE}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="60" height="20" rowTotalGroup="PROTNAME" columnTotalGroup="MTH">
+					<cellContents mode="Opaque" style="Crosstab 10_CT">
+						<textField>
+							<reportElement x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="05d81a94-b387-4cd6-b228-d9cef3666153"/>
 							<textFieldExpression><![CDATA[$V{SMPNAME_MEASURE}]]></textFieldExpression>
 						</textField>
 					</cellContents>
